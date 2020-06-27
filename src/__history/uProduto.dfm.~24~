@@ -1,0 +1,142 @@
+inherited frmProduto: TfrmProduto
+  Caption = 'frmProduto'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited pgPrincipal: TPageControl
+    inherited tbBrowser: TTabSheet
+      inherited DBGrid1: TDBGrid
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'CODIGO'
+            Title.Caption = 'C'#243'digo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NOME'
+            Title.Caption = 'Nome'
+            Width = 404
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VLR_PRECO_VENDA'
+            Title.Caption = 'Vlr. Pre'#231'o Venda'
+            Width = 103
+            Visible = True
+          end>
+      end
+      inherited gBox_Pesquisa: TGroupBox
+        inherited edt_PesqCodigo: TEdit
+          OnKeyPress = edt_PesqCodigoKeyPress
+        end
+      end
+    end
+    inherited tbCadastro: TTabSheet
+      object lbl_codigo: TLabel
+        Left = 9
+        Top = 10
+        Width = 33
+        Height = 13
+        Caption = 'C'#243'digo'
+      end
+      object lbl_Nome: TLabel
+        Left = 9
+        Top = 58
+        Width = 27
+        Height = 13
+        Caption = 'Nome'
+      end
+      object lbl_vlr_venda: TLabel
+        Left = 9
+        Top = 107
+        Width = 49
+        Height = 13
+        Caption = 'Vlr. Venda'
+      end
+      object edt_Nome: TDBEdit
+        Left = 9
+        Top = 77
+        Width = 664
+        Height = 21
+        CharCase = ecUpperCase
+        DataField = 'NOME'
+        DataSource = dsPrincipal
+        TabOrder = 1
+      end
+      object edt_vlr_venda: TDBEdit
+        Left = 9
+        Top = 126
+        Width = 121
+        Height = 21
+        CharCase = ecUpperCase
+        DataField = 'VLR_PRECO_VENDA'
+        DataSource = dsPrincipal
+        TabOrder = 2
+      end
+      object edt_Codigo: TDBEdit
+        Left = 9
+        Top = 29
+        Width = 121
+        Height = 21
+        CharCase = ecUpperCase
+        DataField = 'CODIGO'
+        DataSource = dsPrincipal
+        Enabled = False
+        TabOrder = 0
+      end
+    end
+  end
+  inherited ActionList1: TActionList
+    inherited act_pesquisar: TAction
+      OnExecute = act_pesquisarExecute
+    end
+  end
+  inherited cdsPrincipal: TClientDataSet
+    AfterInsert = cdsPrincipalAfterInsert
+    object cdsPrincipalPRODUTO_ID: TIntegerField
+      FieldName = 'PRODUTO_ID'
+      Required = True
+    end
+    object cdsPrincipalCODIGO: TIntegerField
+      FieldName = 'CODIGO'
+      Required = True
+    end
+    object cdsPrincipalNOME: TStringField
+      FieldName = 'NOME'
+      Required = True
+      Size = 100
+    end
+    object cdsPrincipalVLR_PRECO_VENDA: TFMTBCDField
+      FieldName = 'VLR_PRECO_VENDA'
+      Required = True
+      DisplayFormat = '#0.00'
+      Precision = 18
+      Size = 2
+    end
+  end
+  inherited QryPrincipal: TSQLQuery
+    SQL.Strings = (
+      'SELECT * FROM produto')
+    object QryPrincipalPRODUTO_ID: TIntegerField
+      FieldName = 'PRODUTO_ID'
+      Required = True
+    end
+    object QryPrincipalCODIGO: TIntegerField
+      FieldName = 'CODIGO'
+      Required = True
+    end
+    object QryPrincipalNOME: TStringField
+      FieldName = 'NOME'
+      Required = True
+      Size = 100
+    end
+    object QryPrincipalVLR_PRECO_VENDA: TFMTBCDField
+      FieldName = 'VLR_PRECO_VENDA'
+      Required = True
+      Precision = 18
+      Size = 2
+    end
+  end
+end

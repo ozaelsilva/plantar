@@ -1,0 +1,153 @@
+unit uProduto;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrwCadastro, Data.DB, Data.Win.ADODB,
+  Datasnap.Provider, Datasnap.DBClient, System.Actions, Vcl.ActnList,
+  Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls,
+  Data.FMTBcd, Data.SqlExpr, Vcl.Mask, Vcl.DBCtrls;
+
+type
+  TfrmProduto = class(TfrwCadastro)
+    lbl_codigo: TLabel;
+    lbl_Nome: TLabel;
+    lbl_vlr_venda: TLabel;
+    QryPrincipalPRODUTO_ID: TIntegerField;
+    QryPrincipalCODIGO: TIntegerField;
+    QryPrincipalNOME: TStringField;
+    QryPrincipalVLR_PRECO_VENDA: TFMTBCDField;
+    cdsPrincipalPRODUTO_ID: TIntegerField;
+    cdsPrincipalCODIGO: TIntegerField;
+    cdsPrincipalNOME: TStringField;
+    cdsPrincipalVLR_PRECO_VENDA: TFMTBCDField;
+    edt_Nome: TDBEdit;
+    edt_vlr_venda: TDBEdit;
+    edt_Codigo: TDBEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
+    procedure act_pesquisarExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function VerificarCampos(iIndice : Integer) : Boolean; override;
+    procedure Cfg_Hints; override;
+    procedure setCamposObrigatorios; override;
+    procedure setTituloCampos; override;
+
+  end;
+
+var
+  frmProduto: TfrmProduto;
+
+implementation
+
+{$R *.dfm}
+
+uses uMensagem, uBiblioteca;
+
+procedure TfrmProduto.act_pesquisarExecute(Sender: TObject);
+begin
+  inherited;
+  { Pesquisar Registro }
+
+  try
+    if not CampoNulo then
+    begin
+      Screen.Cursor := crHourGlass;
+      QryPrincipal.SQL.Text := Self.fSqlPrincipal;
+
+      lFiltro := EmptyStr;
+      lFiltro := Self.fSqlPrincipal;
+
+      if not (edt_PesqCodigo.Text = EmptyStr) then
+         lFiltro := AddFiltro_Aux(lFiltro, ' CODIGO = ' + edt_PesqCodigo.Text );
+
+      if not (edt_PesqDescricao.Text = EmptyStr) then
+         lFiltro := AddFiltro_Aux(lFiltro, ' NOME LIKE ' + QuotedStr(Trim('%' + edt_PesqDescricao.Text + '%' )));
+
+      QryPrincipal.SQL.Clear;
+      QryPrincipal.SQL.Add( lFiltro + OrderBy );
+
+      CdsPrincipal.Refresh;
+      Cfg_Button;
+
+    end;
+  finally
+     Screen.Cursor := crDefault;
+     CdsPrincipal.Open;
+  end;
+end;
+
+procedure TfrmProduto.cdsPrincipalAfterInsert(DataSet: TDataSet);
+begin
+  inherited;
+  cdsPrincipalPRODUTO_ID.Value := 9999;
+  cdsPrincipalCODIGO.Value := 9999;
+end;
+
+procedure TfrmProduto.Cfg_Hints;
+begin
+  inherited;
+
+end;
+
+procedure TfrmProduto.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+  TituloFormulario := 'Produto';
+  OrderBy := ' CODIGO';
+
+end;
+
+procedure TfrmProduto.setCamposObrigatorios;
+begin
+  cdsPrincipalCODIGO.Required          := true;
+  lbl_codigo.Caption                   := lbl_codigo.Caption + '*';
+
+  cdsPrincipalNOME.Required            := true;
+  lbl_Nome.Caption                     := lbl_Nome.Caption + '*';
+
+  cdsPrincipalVLR_PRECO_VENDA.Required := true;
+  lbl_vlr_venda.Caption                := lbl_vlr_venda.Caption + '*';
+
+end;
+
+procedure TfrmProduto.setTituloCampos;
+begin
+  cdsPrincipalCODIGO.DisplayLabel          := 'Código';
+  cdsPrincipalNOME.DisplayLabel            := 'Nome';
+  cdsPrincipalVLR_PRECO_VENDA.DisplayLabel := 'Vlr. Preço Venda';
+end;
+
+function TfrmProduto.VerificarCampos(iIndice: Integer): Boolean;
+var
+  bAchou : Boolean;
+begin
+  inherited;
+
+  bAchou := True;
+
+  if ((iIndice = 1) or (iIndice = 999)) and (edt_Nome.Text = EmptyStr) then
+  begin
+    SysMensagem('Campo Nome e obrigatório!', dsAviso);
+
+    bAchou := False;
+    edt_Nome.SetFocus;
+  end else
+  if ((iIndice = 2) or (iIndice = 999)) and (edt_vlr_venda.Text = EmptyStr) then
+  begin
+    SysMensagem('Valor Preço venda e obrigatório!', dsAviso);
+
+    bAchou := False;
+    edt_vlr_venda.SetFocus;
+  end;
+
+  Result := bAchou;
+
+end;
+
+end.

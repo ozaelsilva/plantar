@@ -1,0 +1,309 @@
+unit udmPrincipal;
+
+interface
+
+uses
+  SysUtils, Classes, WideStrings, FMTBcd, Provider, DBClient, DB, SqlExpr, IniFiles,
+  Data.DBXFirebird;
+
+type
+  TdmPrincipal = class(TDataModule)
+    SQLConnection1: TSQLConnection;
+    qryAux: TSQLQuery;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FDirCertificado, FSenhaCertificado, FUrlWebService, FDirBoleto, FAmbiente : String;
+    FVisualizarJson : Boolean;
+
+    sArquivoConexoes, sArquivoPreferencias, sUser_Name, sPassword, sHostName, sDatabase, sDirBoleto: string;
+    procedure LerParametros(Conexao: String);
+
+    function LerUltimoAliasValido(Conexao, Dir: String): String;
+    procedure CarregarParametros(p_Online: Boolean;
+                                        p_User     : String = '';
+                                        p_Password : String = '';
+                                        p_HostName : String = '';
+                                        p_Database : String = '');
+
+  public
+    { Public declarations }
+    bDatabaseAtivo : Boolean;
+    function DecriptaSenha(sText: String): String;
+    function EncriptaSenha(sText: String): String;
+
+    function TestarConexao(p_xOnline: Boolean;
+                           p_xUser     : String = '';
+                           p_xPassword : String = '';
+                           p_xHostName : String = '';
+                           p_xDatabase : String = '') : Boolean;
+
+    function HoraAtual : TTime;
+    function DataAtual : TDate;
+
+    function RecuperarIdentificador(sNomeGEN: String): Integer;
+
+  end;
+
+var
+  dmPrincipal: TdmPrincipal;
+
+implementation
+
+uses uMensagem, Forms, uConstante, uBiblioteca, uVariaveisGlobais;
+
+Const
+  cNomePreferences = 'PREFERENCES';
+  cNomeAlias = 'ALIAS';
+  
+{$R *.dfm}
+
+{ TdmPrincipal }
+
+procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
+begin
+  bDatabaseAtivo := False;
+
+  sArquivoConexoes := ExtractFilePath(Application.ExeName) + 'Config.ini';
+  sArquivoPreferencias := ExtractFilePath(Application.ExeName) + 'Preferences.ini';
+
+  if FileExists(sArquivoConexoes) and FileExists(sArquivoPreferencias) then
+  begin
+    if not(dmPrincipal.TestarConexao(false)) then
+      SysMensagem('Erro ao tentar conectar na base de dados!', dsErro);
+
+  end else
+    SysMensagem('Arquivo de configurações não foi encontrado!', dsErro);
+
+  VarDirCertificado   := FDirCertificado;
+  VarSenhaCertificado := FSenhaCertificado;
+  VarUrlWebService    := FUrlWebService;
+
+  VarDirBoleto        := FDirBoleto;
+  VarVisualizarJson   := FVisualizarJson;
+  VarAmbiente         := FAmbiente;
+end;
+
+function TdmPrincipal.DecriptaSenha(sText: String): String;
+begin
+  Result := sText;
+end;
+
+function TdmPrincipal.EncriptaSenha(sText: String): String;
+begin
+  Result := sText;
+end;
+
+function TdmPrincipal.RecuperarIdentificador(sNomeGEN : String) : Integer;
+begin
+  with qryAux do
+  begin
+    Close;
+    SQL.Clear;
+
+    SQL.Add('SELECT GEN_ID(' + sNomeGEN + ', 0) FROM RDB$DATABASE' );
+
+    try
+      if not Prepared then
+        Prepared := True;
+
+      Open;
+
+    finally
+      if not IsEmpty then
+      begin
+        Result := Fields[0].Value;
+      end
+      else
+        Result := 0;
+
+      Prepared := False;
+      Close;
+    end;
+  end;
+end;
+
+function TdmPrincipal.HoraAtual: TTime;
+begin
+  with qryAux do
+  begin
+    Close;
+    SQL.Clear;
+
+    SQL.Add('SELECT CURRENT_TIME AS HORA_ATUAL ');
+    SQL.Add('FROM RDB$DATABASE ');
+
+    try
+      if not Prepared then
+        Prepared := True;
+
+      Open;
+
+    finally
+      if not IsEmpty then
+      begin
+        Result := FieldByName('HORA_ATUAL').Value;
+      end
+      else
+        Result := 0;
+
+      Prepared := False;
+      Close;
+    end;
+  end;
+end;
+
+function TdmPrincipal.DataAtual: TDate;
+begin
+  with qryAux do
+  begin
+    Close;
+    SQL.Clear;
+
+    SQL.Add('SELECT CURRENT_DATE AS DATA_ATUAL ');
+    SQL.Add('FROM RDB$DATABASE ');
+
+    try
+      if not Prepared then
+        Prepared := True;
+
+      Open;
+
+    finally
+      if not IsEmpty then
+      begin
+        Result := FieldByName('DATA_ATUAL').Value;
+      end
+      else
+        Result := 0;
+
+      Prepared := False;
+      Close;
+    end;
+  end;
+end;
+
+procedure TdmPrincipal.LerParametros(Conexao : String);
+var
+ Ini: TIniFile;
+ ArquivoIni : string;
+begin
+  { Le Arquivo de Inicialização }
+  ArquivoIni := sArquivoConexoes;
+  try
+    if FileExists(ArquivoIni) then
+    begin
+      Ini := TIniFile.Create(ArquivoIni);
+      try
+        sUser_Name := Ini.ReadString(Conexao, 'User_Name', sUser_Name);
+        sPassword  := Ini.ReadString(Conexao, 'Password',  sPassword);
+        sHostName  := Ini.ReadString(Conexao, 'HostName',  sHostName);
+        sDatabase  := Ini.ReadString(Conexao, 'Database',  sDatabase);
+      finally
+        Ini.Free;
+      end;
+    end;
+  except
+    on E: Exception do
+      SysMensagem('Erro : ' + E.Message, dsErro);
+  end;
+end;
+
+procedure TdmPrincipal.CarregarParametros(p_Online: Boolean;
+                                          p_User     : String = '';
+                                          p_Password : String = '';
+                                          p_HostName : String = '';
+                                          p_Database : String = '');
+var
+  sProvider  : string;
+  sUsuario   : string;
+  sSenha     : string;
+  sCatalogo  : string;
+  sDataSource: string;
+  sPersist   : string;
+begin
+  { Carregar Paramentros de Conexão }
+
+  with SQLConnection1 do
+  begin
+    SQLConnection1.Close;
+
+    KeepConnection := False;
+    LoginPrompt := False;
+    LoadParamsOnConnect:= False;
+    DriverName := 'Firebird';
+    VendorLib := 'fbclient.dll';
+    LibraryName := 'dbxfb.dll';
+    Params.Values['SQLDialect'] := '3';
+
+    if p_Online then
+    begin
+      SQLConnection1.Params.Values['HostName'] := p_HostName;
+      SQLConnection1.Params.Values['DataBase'] := p_HostName + ':' + p_Database;
+      SQLConnection1.Params.Values['User_Name']:= p_User;
+      SQLConnection1.Params.Values['Password'] := p_Password;
+    end else
+    begin
+      SQLConnection1.Params.Values['HostName'] := sHostName;
+      SQLConnection1.Params.Values['DataBase'] := sHostName + ':' + sDatabase;
+      SQLConnection1.Params.Values['User_Name']:= sUser_Name;
+      SQLConnection1.Params.Values['Password'] := DecriptaSenha(sPassword);
+    end;
+  end;
+end;
+
+function TdmPrincipal.LerUltimoAliasValido(Conexao, Dir: String): String;
+var
+  ArqIni : tIniFile;
+  DB     : String;
+begin
+  DB     := EmptyStr;
+  ArqIni := tIniFile.Create(dir);
+  try
+    DB     := ArqIni.ReadString(Conexao, cNomeAlias, DB);
+    Result := DB;
+  finally
+    ArqIni.Free;
+  end;
+end;
+
+function TdmPrincipal.TestarConexao(p_xOnline: Boolean; p_xUser, p_xPassword,
+  p_xHostName, p_xDatabase: String): Boolean;
+var
+  bConectado : Boolean;
+begin
+
+  try
+
+    bConectado := false;
+
+    if p_xOnline then
+      CarregarParametros(p_xOnline, p_xUser, p_xPassword, p_xHostName, p_xDatabase)
+    else begin
+      LerParametros(LerUltimoAliasValido(cNomePreferences, sArquivoPreferencias));
+      CarregarParametros(p_xOnline);
+    end;
+
+    try
+
+      SQLConnection1.Open;
+      bConectado := True;
+
+    except on E: Exception do
+      bConectado := false;
+    end;
+
+  finally
+    if p_xOnline then
+      Sistema.SysVarBanco_de_dados := p_xDatabase
+    else
+      Sistema.SysVarBanco_de_dados := sDatabase;
+
+    Sistema.SysDirBoleto := sDirBoleto;
+
+    bDatabaseAtivo := bConectado;
+    Result := bConectado;
+  end;
+end;
+
+end.

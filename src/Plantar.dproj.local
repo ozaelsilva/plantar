@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2020/06/25 10:17:01.000.090,=C:\Users\rafae\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/06/25 10:25:29.000.079,C:\Projetos\Plantar\src\Unit1.pas=C:\Users\rafae\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/06/25 10:25:29.000.079,C:\Projetos\Plantar\src\Unit1.dfm=C:\Users\rafae\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2020/06/25 10:25:38.000.437,C:\Projetos\Plantar\src\Plantar.dproj=C:\Users\rafae\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2020/06/25 10:37:45.000.231,=C:\Projetos\Plantar\src\uConstante.pas</Transaction>
+    <Transaction>2020/06/25 10:37:45.000.108,=C:\Projetos\Plantar\src\uBiblioteca.pas</Transaction>
+    <Transaction>2020/06/25 10:37:45.000.853,=C:\Projetos\Plantar\src\udmPrincipal.pas</Transaction>
+    <Transaction>2020/06/25 10:37:46.000.536,=C:\Projetos\Plantar\src\ufrwPesquisa.pas</Transaction>
+    <Transaction>2020/06/25 10:37:46.000.236,=C:\Projetos\Plantar\src\ufrmSplash.pas</Transaction>
+    <Transaction>2020/06/25 10:37:46.000.583,=C:\Projetos\Plantar\src\uMensagem.pas</Transaction>
+    <Transaction>2020/06/25 10:37:50.000.612,=C:\Projetos\Plantar\src\uVariaveisGlobais.pas</Transaction>
+    <Transaction>2020/06/25 10:37:50.000.543,=C:\Projetos\Plantar\src\uPesquisaGeral.pas</Transaction>
+    <Transaction>2020/06/25 10:37:50.000.206,=C:\Projetos\Plantar\src\untPrincipal.pas</Transaction>
+    <Transaction>2020/06/25 10:37:50.000.409,=C:\Projetos\Plantar\src\uPesqGeral.pas</Transaction>
+    <Transaction>2020/06/25 11:14:07.000.494,=C:\Projetos\Plantar\src\ufrmSobre.pas</Transaction>
+    <Transaction>2020/06/25 11:58:38.000.533,C:\Projetos\Plantar\src\uPesqGeral.pas=</Transaction>
+    <Transaction>2020/06/25 11:58:44.000.446,C:\Projetos\Plantar\src\uPesquisaGeral.pas=</Transaction>
+    <Transaction>2020/06/25 11:58:48.000.383,C:\Projetos\Plantar\src\ufrwPesquisa.pas=</Transaction>
+    <Transaction>2020/06/25 11:59:32.000.940,=C:\Projetos\Plantar\src\Framework\ufrwPesquisa.pas</Transaction>
+    <Transaction>2020/06/25 12:02:43.000.770,=C:\Projetos\Plantar\src\Framework\ufrwPai.pas</Transaction>
+    <Transaction>2020/06/25 12:03:05.000.186,=C:\Projetos\Plantar\src\Framework\ufrwCadastro.pas</Transaction>
+    <Transaction>2020/06/25 12:54:25.000.769,=C:\Projetos\Plantar\src\Unit2.pas</Transaction>
+    <Transaction>2020/06/25 12:54:49.000.525,C:\Projetos\Plantar\src\Unit2.pas=C:\Projetos\Plantar\src\uProduto.pas</Transaction>
+    <Transaction>2020/06/25 12:54:49.000.525,C:\Projetos\Plantar\src\Unit2.dfm=C:\Projetos\Plantar\src\uProduto.dfm</Transaction>
+    <Transaction>2020/06/26 16:02:28.000.537,=C:\Projetos\Plantar\src\Unit2.pas</Transaction>
+    <Transaction>2020/06/26 16:03:05.000.430,C:\Projetos\Plantar\src\Unit2.pas=C:\Projetos\Plantar\src\uProdutor.pas</Transaction>
+    <Transaction>2020/06/26 16:03:05.000.430,C:\Projetos\Plantar\src\Unit2.dfm=C:\Projetos\Plantar\src\uProdutor.dfm</Transaction>
+    <Transaction>2020/06/26 16:03:41.000.084,=C:\Projetos\Plantar\src\Unit3.pas</Transaction>
+    <Transaction>2020/06/26 16:04:04.000.261,C:\Projetos\Plantar\src\Unit3.dfm=C:\Projetos\Plantar\src\uDistribuidor.dfm</Transaction>
+    <Transaction>2020/06/26 16:04:04.000.261,C:\Projetos\Plantar\src\Unit3.pas=C:\Projetos\Plantar\src\uDistribuidor.pas</Transaction>
+    <Transaction>2020/06/26 16:04:37.000.057,=C:\Projetos\Plantar\src\Unit3.pas</Transaction>
+    <Transaction>2020/06/26 16:05:06.000.999,C:\Projetos\Plantar\src\Unit3.dfm=C:\Projetos\Plantar\src\uNegociacao.dfm</Transaction>
+    <Transaction>2020/06/26 16:05:06.000.999,C:\Projetos\Plantar\src\Unit3.pas=C:\Projetos\Plantar\src\uNegociacao.pas</Transaction>
+    <Transaction>2020/06/26 16:11:01.000.495,C:\Projetos\Plantar\src\Unit1.pas=</Transaction>
+    <Transaction>2020/06/26 16:11:23.000.984,C:\Projetos\Plantar\src\untPrincipal.pas=C:\Projetos\Plantar\src\uPrincipal.pas</Transaction>
+    <Transaction>2020/06/26 16:11:23.000.984,C:\Projetos\Plantar\src\untPrincipal.dfm=C:\Projetos\Plantar\src\uPrincipal.dfm</Transaction>
+    <Transaction>2020/06/26 16:12:43.000.953,C:\Projetos\Plantar\src\ufrmSobre.pas=C:\Projetos\Plantar\src\uSobre.pas</Transaction>
+    <Transaction>2020/06/26 16:12:43.000.953,C:\Projetos\Plantar\src\ufrmSobre.dfm=C:\Projetos\Plantar\src\uSobre.dfm</Transaction>
+    <Transaction>2020/06/26 16:12:50.000.753,C:\Projetos\Plantar\src\ufrmSplash.dfm=C:\Projetos\Plantar\src\uSplash.dfm</Transaction>
+    <Transaction>2020/06/26 16:12:50.000.753,C:\Projetos\Plantar\src\ufrmSplash.pas=C:\Projetos\Plantar\src\uSplash.pas</Transaction>
+    <Transaction>2020/06/26 21:51:03.000.006,=C:\Projetos\Plantar\src\uPesqGeral.pas</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,2631 @@
+object dmPrincipal: TdmPrincipal
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 545
+  Width = 892
+  object SQLConnection1: TSQLConnection
+    DriverName = 'Firebird'
+    LoginPrompt = False
+    Params.Strings = (
+      'DriverUnit=Data.DBXFirebird'
+      
+        'DriverPackageLoader=TDBXDynalinkDriverLoader,DBXFirebirdDriver20' +
+        '0.bpl'
+      
+        'DriverAssemblyLoader=Borland.Data.TDBXDynalinkDriverLoader,Borla' +
+        'nd.Data.DbxCommonDriver,Version=20.0.0.0,Culture=neutral,PublicK' +
+        'eyToken=91d62ebb5b0d1b1b'
+      
+        'MetaDataPackageLoader=TDBXFirebirdMetaDataCommandFactory,DbxFire' +
+        'birdDriver200.bpl'
+      
+        'MetaDataAssemblyLoader=Borland.Data.TDBXFirebirdMetaDataCommandF' +
+        'actory,Borland.Data.DbxFirebirdDriver,Version=20.0.0.0,Culture=n' +
+        'eutral,PublicKeyToken=91d62ebb5b0d1b1b'
+      'GetDriverFunc=getSQLDriverINTERBASE'
+      'LibraryName=dbxfb.dll'
+      'LibraryNameOsx=libsqlfb.dylib'
+      'VendorLib=fbclient.dll'
+      'VendorLibWin64=fbclient.dll'
+      'VendorLibOsx=/Library/Frameworks/Firebird.framework/Firebird'
+      'Database=C:\Projetos\Plantar\data\PLANTAR.FDB'
+      'User_Name=sysdba'
+      'Password=masterkey'
+      'Role=RoleName'
+      'MaxBlobSize=-1'
+      'LocaleCode=0000'
+      'IsolationLevel=ReadCommitted'
+      'SQLDialect=3'
+      'CommitRetain=False'
+      'WaitOnLocks=True'
+      'TrimChar=False')
+    Connected = True
+    Left = 264
+    Top = 110
+  end
+  object QryCobranca: TSQLQuery
+    MaxBlobSize = 1
+    Params = <>
+    SQL.Strings = (
+      'SELECT  '
+      #39'0'#39'||SUBSTRING(unid.UNNUMR_CNPJ FROM 01 FOR 08) AS "nuCPFCNPJ",'
+      
+        'SUBSTRING(unid.UNNUMR_CNPJ FROM 09 FOR 04)      AS "filialCPFCNP' +
+        'J",'
+      
+        'SUBSTRING(unid.UNNUMR_CNPJ FROM 13 FOR 02)      AS "ctrlCPFCNPJ"' +
+        ','
+      #39'2'#39' "cdTipoAcesso",'
+      #39'0'#39' "clubBanco",'
+      #39'0'#39' "cdTipoContrato",'
+      #39'0000300235'#39' "nuSequenciaContrato",'
+      #39'09'#39' "idProduto",'
+      ''
+      
+        'cocb.CCBCODG_AGENCIACEDENTE||'#39'0000000'#39'||cocb.CCBNUMR_CONTACEDENT' +
+        'E "nuNegociacao",'
+      ''
+      #39'237'#39' "cdBanco",'
+      #39'0'#39' "eNuSequenciaContrato",'
+      #39'001'#39' "tpRegistro",'
+      #39'0'#39' "cdProduto",'
+      ''
+      
+        'alun.alcodg_aluno||parc.panumr_parcela||parc.paano_letivo AS "nu' +
+        'Titulo",'
+      
+        'alun.alcodg_aluno||parc.panumr_parcela||parc.paano_letivo AS "nu' +
+        'Cliente",'
+      ''
+      'CURRENT_DATE AS "dtEmissaoTitulo",'
+      'CASE EXTRACT(WEEKDAY FROM parc.padata_vencimento)'
+      '     WHEN 6 THEN'
+      '     parc.padata_vencimento + 2'
+      '     WHEN 0 THEN'
+      '     parc.padata_vencimento + 1'
+      '     ELSE'
+      '     parc.padata_vencimento'
+      'END AS "dtVencimentoTitulo",'
+      ''
+      #39'0'#39' "tpVencimento",'
+      '(parc.pavalr_parcela * 100) AS "vlNominalTitulo",'
+      #39'04'#39' "cdEspecieTitulo",'
+      #39'0'#39' "tpProtestoAutomaticoNegativacao",'
+      #39'0'#39' "prazoProtestoAutomaticoNegativacao",'
+      #39#39' "controleParticipante",'
+      #39#39' "cdPagamentoParcial",'
+      #39'0'#39' "qtdePagamentoParcial",'
+      #39'0'#39' "percentualJuros",'
+      #39'0'#39' "vlJuros",'
+      #39'0'#39' "qtdeDiasJuros",'
+      #39'0'#39' "percentualMulta",'
+      #39'0'#39' "vlMulta",'
+      #39'0'#39' "qtdeDiasMulta",'
+      ''
+      #39'0'#39' "percentualDesconto1",'
+      'COALESCE( parc.pavalr_parcela -'
+      '('
+      'SELECT'
+      
+        'CASE WHEN (COALESCE(SVPERC_IRMAO, 0) > 0 AND matr.MAINFO_IRMAOS ' +
+        '<> '#39'N'#39') THEN'
+      
+        '     seva.SVLVALR_SERVICO - (seva.SVLVALR_SERVICO * SVPERC_IRMAO' +
+        ' / 100)'
+      ' ELSE'
+      '     seva.SVLVALR_SERVICO'
+      'END'
+      'FROM SERVICO serv'
+      
+        'LEFT JOIN SERVICO_VALOR seva ON (seva.SVLCODG_EMPRESA = serv.SVC' +
+        'ODG_EMPRESA AND seva.SVLCODG_UNIDADE = serv.SVCODG_UNIDADE AND s' +
+        'eva.SVLCODG_SERVICO = SVCODG_SERVICO)'
+      ' WHERE seva.SVLCODG_EMPRESA   = matr.MACODG_EMPRESA AND'
+      '       seva.SVLCODG_UNIDADE   = matr.MACODG_UNIDADE AND'
+      '       seva.SVLINFO_ANOLETIVO = matr.MAANO_LETIVO AND'
+      '       seva.SVLCODG_SERVICO   = turm.TUCODG_SERVICO AND'
+      '       seva.SVLINFO_DIAVCTO   = 5), 0) * 100 "vlDesconto1",'
+      ''
+      
+        '  (parc.padata_vencimento - EXTRACT(DAY FROM parc.padata_vencime' +
+        'nto) + 5) AS "dataLimiteDesconto1",'
+      ''
+      #39'0'#39' "percentualDesconto2",'
+      'COALESCE( parc.pavalr_parcela -'
+      '('
+      'SELECT'
+      
+        'CASE WHEN (COALESCE(SVPERC_IRMAO, 0) > 0 AND matr.MAINFO_IRMAOS ' +
+        '<> '#39'N'#39') THEN'
+      
+        '     seva.SVLVALR_SERVICO - (seva.SVLVALR_SERVICO * SVPERC_IRMAO' +
+        ' / 100)'
+      ' ELSE'
+      '     seva.SVLVALR_SERVICO'
+      'END'
+      'FROM SERVICO serv'
+      
+        'LEFT JOIN SERVICO_VALOR seva ON (seva.SVLCODG_EMPRESA = serv.SVC' +
+        'ODG_EMPRESA AND seva.SVLCODG_UNIDADE = serv.SVCODG_UNIDADE AND s' +
+        'eva.SVLCODG_SERVICO = SVCODG_SERVICO)'
+      ' WHERE seva.SVLCODG_EMPRESA   = matr.MACODG_EMPRESA AND'
+      '       seva.SVLCODG_UNIDADE   = matr.MACODG_UNIDADE AND'
+      '       seva.SVLINFO_ANOLETIVO = matr.MAANO_LETIVO AND'
+      '       seva.SVLCODG_SERVICO   = turm.TUCODG_SERVICO AND'
+      '       seva.SVLINFO_DIAVCTO   = 10), 0) * 100 "vlDesconto2",'
+      ''
+      ''
+      
+        '  (parc.padata_vencimento - EXTRACT(DAY FROM parc.padata_vencime' +
+        'nto) + 10) AS "dataLimiteDesconto2",'
+      ''
+      ''
+      #39'0'#39' "percentualDesconto3",'
+      'COALESCE( parc.pavalr_parcela -'
+      '('
+      'SELECT'
+      
+        'CASE WHEN (COALESCE(SVPERC_IRMAO, 0) > 0 AND matr.MAINFO_IRMAOS ' +
+        '<> '#39'N'#39') THEN'
+      
+        '     seva.SVLVALR_SERVICO - (seva.SVLVALR_SERVICO * SVPERC_IRMAO' +
+        ' / 100)'
+      ' ELSE'
+      '     seva.SVLVALR_SERVICO'
+      'END'
+      'FROM SERVICO serv'
+      
+        'LEFT JOIN SERVICO_VALOR seva ON (seva.SVLCODG_EMPRESA = serv.SVC' +
+        'ODG_EMPRESA AND seva.SVLCODG_UNIDADE = serv.SVCODG_UNIDADE AND s' +
+        'eva.SVLCODG_SERVICO = SVCODG_SERVICO)'
+      ' WHERE seva.SVLCODG_EMPRESA   = matr.MACODG_EMPRESA AND'
+      '       seva.SVLCODG_UNIDADE   = matr.MACODG_UNIDADE AND'
+      '       seva.SVLINFO_ANOLETIVO = matr.MAANO_LETIVO AND'
+      '       seva.SVLCODG_SERVICO   = turm.TUCODG_SERVICO AND'
+      '       seva.SVLINFO_DIAVCTO   = 20), 0) * 100 "vlDesconto3",'
+      ''
+      
+        '  (parc.padata_vencimento - EXTRACT(DAY FROM parc.padata_vencime' +
+        'nto) + 20) AS "dataLimiteDesconto3",'
+      ''
+      #39'0'#39' "prazoBonificacao",'
+      #39'0'#39' "percentualBonificacao",'
+      #39'0'#39' "vlBonificacao",'
+      #39#39' "dtLimiteBonificacao",'
+      #39'0'#39' "vlAbatimento",'
+      #39'0'#39' "vlIOF",'
+      
+        'SUBSTRING(pess.penome_pessoa      FROM 1 FOR 70) AS "nomePagador' +
+        '",'
+      
+        'SUBSTRING(pess.peinfo_endereco    FROM 1 FOR 40) AS "logradouroP' +
+        'agador",'
+      #39#39' AS "nuLogradouroPagador",'
+      
+        'SUBSTRING(pess.peinfo_complemento FROM 1 FOR 15) AS "complemento' +
+        'LogradouroPagador",'
+      
+        'SUBSTRING(pess.penumr_cep         FROM 1 FOR 5)  AS "cepPagador"' +
+        ','
+      
+        'SUBSTRING(pess.penumr_cep         FROM 6 FOR 3)  AS "complemento' +
+        'CepPagador",'
+      
+        'SUBSTRING(pess.penome_bairro      FROM 1 FOR 40) AS "bairroPagad' +
+        'or",'
+      
+        'SUBSTRING(pess.penome_cidade      FROM 1 FOR 30) AS "municipioPa' +
+        'gador",'
+      'pess.peinfo_uf AS "ufPagador",'
+      #39'1'#39' "cdIndCpfcnpjPagador",'
+      '('#39'000'#39'||pess.penumr_cnpjcpf) AS "nuCpfcnpjPagador",'
+      
+        'SUBSTRING(pess.PEE_MAIL          FROM 1 FOR 70)  AS "endEletroni' +
+        'coPagador",'
+      ''
+      '/*TESTA CAMPOS DE AVALISTA*/'
+      ''
+      
+        '--SUBSTRING(peav.penome_pessoa   FROM 1 FOR 40)    AS "nomeSacad' +
+        'orAvalista",'
+      'CASE WHEN (peav.penome_pessoa IS NULL) THEN'
+      '  '#39#39
+      'ELSE'
+      '  SUBSTRING(peav.penome_pessoa   FROM 1 FOR 40)'
+      'END AS "nomeSacadorAvalista",'
+      ''
+      
+        '--SUBSTRING(peav.peinfo_endereco from 1 FOR 40)    AS "logradour' +
+        'oSacadorAvalista",'
+      'CASE WHEN (peav.peinfo_endereco IS NULL) THEN'
+      '  '#39#39
+      'ELSE'
+      '  SUBSTRING(peav.peinfo_endereco from 1 FOR 40)'
+      'END AS "logradouroSacadorAvalista",'
+      ''
+      #39'0'#39' AS "nuLogradouroSacadorAvalista",'
+      ''
+      
+        '--SUBSTRING(peav.peinfo_complemento FROM 1 FOR 15) AS "complemen' +
+        'toLogradouroSacadorAvalista",'
+      'CASE WHEN (peav.peinfo_complemento IS NULL) THEN'
+      '  '#39#39
+      'ELSE'
+      '  SUBSTRING(peav.peinfo_complemento FROM 1 FOR 15)'
+      'END AS "complementoLogradouroSacadorAvalista",'
+      ''
+      ''
+      
+        '--SUBSTRING(peav.penumr_cep         FROM 1 FOR 5)  AS "cepSacado' +
+        'rAvalista",'
+      'CASE WHEN (peav.penumr_cep IS NULL) THEN'
+      '  '#39'0'#39
+      'ELSE'
+      '  SUBSTRING(peav.penumr_cep         FROM 1 FOR 5)'
+      'END AS "cepSacadorAvalista",'
+      ''
+      ''
+      
+        '--SUBSTRING(peav.penumr_cep         FROM 6 FOR 3)  AS "complemen' +
+        'toCepSacadorAvalista",'
+      'CASE WHEN (peav.penumr_cep IS NULL) THEN'
+      '  '#39'0'#39
+      'ELSE'
+      '  SUBSTRING(peav.penumr_cep         FROM 6 FOR 3)'
+      'END AS "complementoCepSacadorAvalista",'
+      ''
+      ''
+      
+        '--SUBSTRING(peav.penome_bairro      FROM 1 FOR 40) AS "bairroSac' +
+        'adorAvalista",'
+      'CASE WHEN (peav.penome_bairro IS NULL) THEN'
+      '  '#39#39
+      'ELSE'
+      '  SUBSTRING(peav.penome_bairro      FROM 1 FOR 40)'
+      'END AS "bairroSacadorAvalista",'
+      ''
+      ''
+      
+        '--SUBSTRING(peav.penome_cidade      FROM 1 FOR 40) AS "municipio' +
+        'SacadorAvalista",'
+      'CASE WHEN (peav.penome_cidade IS NULL) THEN'
+      '  '#39#39
+      'ELSE'
+      '  SUBSTRING(peav.penome_cidade      FROM 1 FOR 40)'
+      'END AS "municipioSacadorAvalista",'
+      ''
+      '--peav.peinfo_uf "ufSacadorAvalista",'
+      'CASE WHEN (peav.penome_cidade IS NULL) THEN'
+      '  '#39#39
+      'ELSE'
+      '  peav.peinfo_uf'
+      'END AS "ufSacadorAvalista",'
+      ''
+      ''
+      #39'1'#39' "cdIndCpfcnpjSacadorAvalista",'
+      ''
+      '--'#39'000'#39'||peav.penumr_cnpjcpf "nuCpfcnpjSacadorAvalista",'
+      'CASE WHEN (peav.penumr_cnpjcpf IS NULL) THEN'
+      '  '#39'0'#39
+      'ELSE'
+      '  '#39'000'#39'||peav.penumr_cnpjcpf'
+      'END AS "nuCpfcnpjSacadorAvalista",'
+      ''
+      ''
+      
+        'SUBSTRING(peav.PEE_MAIL           FROM 1 FOR 70) AS "endEletroni' +
+        'coSacadorAvalista",'
+      ''
+      ''
+      'alun.ALCODG_ALUNO,'
+      'parc.PACODG_EMPRESA,'
+      'parc.PACODG_UNIDADE,'
+      'parc.PAANO_LETIVO,'
+      'parc.PANUMR_PARCELA,'
+      'alun.ALNOME_ALUNO,'
+      'parc.PADATA_VENCIMENTO,'
+      'parc.PAVALR_PARCELA,'
+      'parc.PAVALR_DESCONTO,'
+      'parc.PAVALR_PAGO,'
+      ''
+      
+        'cocb.CCBCODG_AGENCIACEDENTE||'#39'-'#39'||cocb.CCBNUMR_DIGITOAGENCIACEDE' +
+        'NTE "AGENCIABENEFICIARIO",'
+      
+        #39'000'#39'||cocb.CCBNUMR_CONTACEDENTE||'#39'-'#39'||cocb.CCBNUMR_DIGITOCONTAC' +
+        'EDENTE "CONTABENEFICIARIO",'
+      ''
+      'pess.penumr_cnpjcpf AS "CPFCNPJPAGADOR",'
+      'unid.UNNUMR_CNPJ AS  "CNPJBENEFICIARIO",'
+      'peav.penumr_cnpjcpf "CPFCNPJAVALISTA",'
+      'turm.tucodg_turma,'
+      'turm.tunome_turma,'
+      ''
+      'COALESCE( '
+      '('
+      'SELECT'
+      
+        'CASE WHEN (COALESCE(SVPERC_IRMAO, 0) > 0 AND matr.MAINFO_IRMAOS ' +
+        '<> '#39'N'#39') THEN'
+      
+        '     seva.SVLVALR_SERVICO - (seva.SVLVALR_SERVICO * SVPERC_IRMAO' +
+        ' / 100)'
+      ' ELSE'
+      '     seva.SVLVALR_SERVICO'
+      'END'
+      'FROM SERVICO serv'
+      
+        'LEFT JOIN SERVICO_VALOR seva ON (seva.SVLCODG_EMPRESA = serv.SVC' +
+        'ODG_EMPRESA AND seva.SVLCODG_UNIDADE = serv.SVCODG_UNIDADE AND s' +
+        'eva.SVLCODG_SERVICO = SVCODG_SERVICO)'
+      ' WHERE seva.SVLCODG_EMPRESA   = matr.MACODG_EMPRESA AND'
+      '       seva.SVLCODG_UNIDADE   = matr.MACODG_UNIDADE AND'
+      '       seva.SVLINFO_ANOLETIVO = matr.MAANO_LETIVO AND'
+      '       seva.SVLCODG_SERVICO   = turm.TUCODG_SERVICO AND'
+      '       seva.SVLINFO_DIAVCTO   = 5), 0)  "VLRDESCONTO1",'
+      ''
+      'COALESCE( '
+      '('
+      'SELECT'
+      
+        'CASE WHEN (COALESCE(SVPERC_IRMAO, 0) > 0 AND matr.MAINFO_IRMAOS ' +
+        '<> '#39'N'#39') THEN'
+      
+        '     seva.SVLVALR_SERVICO - (seva.SVLVALR_SERVICO * SVPERC_IRMAO' +
+        ' / 100)'
+      ' ELSE'
+      '     seva.SVLVALR_SERVICO'
+      'END'
+      'FROM SERVICO serv'
+      
+        'LEFT JOIN SERVICO_VALOR seva ON (seva.SVLCODG_EMPRESA = serv.SVC' +
+        'ODG_EMPRESA AND seva.SVLCODG_UNIDADE = serv.SVCODG_UNIDADE AND s' +
+        'eva.SVLCODG_SERVICO = SVCODG_SERVICO)'
+      ' WHERE seva.SVLCODG_EMPRESA   = matr.MACODG_EMPRESA AND'
+      '       seva.SVLCODG_UNIDADE   = matr.MACODG_UNIDADE AND'
+      '       seva.SVLINFO_ANOLETIVO = matr.MAANO_LETIVO AND'
+      '       seva.SVLCODG_SERVICO   = turm.TUCODG_SERVICO AND'
+      '       seva.SVLINFO_DIAVCTO   = 10), 0)  "VLRDESCONTO2",'
+      ''
+      'COALESCE( '
+      '('
+      'SELECT'
+      
+        'CASE WHEN (COALESCE(SVPERC_IRMAO, 0) > 0 AND matr.MAINFO_IRMAOS ' +
+        '<> '#39'N'#39') THEN'
+      
+        '     seva.SVLVALR_SERVICO - (seva.SVLVALR_SERVICO * SVPERC_IRMAO' +
+        ' / 100)'
+      ' ELSE'
+      '     seva.SVLVALR_SERVICO'
+      'END'
+      'FROM SERVICO serv'
+      
+        'LEFT JOIN SERVICO_VALOR seva ON (seva.SVLCODG_EMPRESA = serv.SVC' +
+        'ODG_EMPRESA AND seva.SVLCODG_UNIDADE = serv.SVCODG_UNIDADE AND s' +
+        'eva.SVLCODG_SERVICO = SVCODG_SERVICO)'
+      ' WHERE seva.SVLCODG_EMPRESA   = matr.MACODG_EMPRESA AND'
+      '       seva.SVLCODG_UNIDADE   = matr.MACODG_UNIDADE AND'
+      '       seva.SVLINFO_ANOLETIVO = matr.MAANO_LETIVO AND'
+      '       seva.SVLCODG_SERVICO   = turm.TUCODG_SERVICO AND'
+      '       seva.SVLINFO_DIAVCTO   = 20), 0)  "VLRDESCONTO3",'
+      ''
+      '('
+      ''
+      '   SELECT FIRST 1 logi.LISTATUS_TITULO'
+      '   FROM logintegracao logi'
+      '   WHERE logi.LICODG_EMPRESA = parc.PACODG_EMPRESA'
+      '   AND   logi.LICODG_UNIDADE = parc.PACODG_UNIDADE'
+      '   AND   logi.LICODG_ALUNO   = parc.PACODG_ALUNO'
+      '   AND   logi.LIANO_LETIVO   = parc.PAANO_LETIVO'
+      '   AND   logi.LINUMR_PARCELA = parc.PANUMR_PARCELA'
+      
+        '   ORDER BY logi.lidata_processado desc, logi.lihora_processado ' +
+        'desc'
+      '  '
+      ') AS STATUS_PARCELA'
+      ''
+      ''
+      'FROM PARCELA parc'
+      
+        'INNER JOIN UNIDADE               unid  ON (unid.UNCODG_UNIDADE  ' +
+        '  = parc.PACODG_UNIDADE AND unid.UNCODG_EMPRESA   = parc.PACODG_' +
+        'EMPRESA)'
+      
+        'INNER JOIN ALUNO                 alun  ON (alun.ALCODG_ALUNO    ' +
+        '  = parc.PACODG_ALUNO   AND alun.ALCODG_EMPRESA   = parc.PACODG_' +
+        'EMPRESA)'
+      
+        'INNER JOIN MATRICULA             matr  ON (matr.MACODG_ALUNO    ' +
+        '  = parc.PACODG_ALUNO   AND matr.MAANO_LETIVO     = parc.PAANO_L' +
+        'ETIVO   AND matr.MACODG_EMPRESA = parc.PACODG_EMPRESA AND matr.M' +
+        'ACODG_UNIDADE = parc.PACODG_UNIDADE)'
+      
+        'INNER JOIN TURMA                 turm  ON (turm.tuCodg_turma    ' +
+        '  = matr.macodg_turma   AND turm.tucodg_empresa   = parc.pacodg_' +
+        'empresa AND'
+      
+        '                                           turm.tucodg_unidade  ' +
+        '  = pacodg_unidade      AND turm.tuinfo_anoletivo = parc.PAANO_L' +
+        'ETIVO)'
+      ''
+      
+        'INNER JOIN PESSOA                pess  ON (pess.pecodg_pessoa   ' +
+        '  = matr.MACODG_RESPONSAVEL)'
+      ''
+      
+        'INNER JOIN CONTACAIXA            coca  ON (coca.CCCODG_EMPRESA  ' +
+        '  = turm.TUCODG_EMPRESA AND coca.CCCODG_UNIDADE = turm.TUCODG_UN' +
+        'IDADECC AND'
+      
+        '                                           coca.CCCODG_CONTACAIX' +
+        'A = turm.TUCODG_CONTACAIXA)'
+      ''
+      
+        'INNER JOIN CONFIGURACAO_COBRANCA cocb  ON (cocb.CCBCODG_EMPRESA ' +
+        '  = unid.UNCODG_EMPRESA AND cocb.CCBCODG_UNIDADE = unid.UNCODG_U' +
+        'NIDADE)'
+      ''
+      
+        'LEFT  JOIN PESSOA                peav  ON (peav.PECODG_PESSOA   ' +
+        '  = matr.MACODG_CORESPONSAVEL)'
+      '')
+    SQLConnection = SQLConnection1
+    Left = 200
+    Top = 198
+    object QryCobrancanuCPFCNPJ: TStringField
+      FieldName = 'nuCPFCNPJ'
+      Size = 15
+    end
+    object QryCobrancafilialCPFCNPJ: TStringField
+      FieldName = 'filialCPFCNPJ'
+      Size = 14
+    end
+    object QryCobrancactrlCPFCNPJ: TStringField
+      FieldName = 'ctrlCPFCNPJ'
+      Size = 14
+    end
+    object QryCobrancacdTipoAcesso: TStringField
+      FieldName = 'cdTipoAcesso'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancaclubBanco: TStringField
+      FieldName = 'clubBanco'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancacdTipoContrato: TStringField
+      FieldName = 'cdTipoContrato'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancanuSequenciaContrato: TStringField
+      FieldName = 'nuSequenciaContrato'
+      Required = True
+      FixedChar = True
+      Size = 10
+    end
+    object QryCobrancaidProduto: TStringField
+      FieldName = 'idProduto'
+      Required = True
+      FixedChar = True
+      Size = 2
+    end
+    object QryCobrancanuNegociacao: TStringField
+      FieldName = 'nuNegociacao'
+      Size = 24
+    end
+    object QryCobrancacdBanco: TStringField
+      FieldName = 'cdBanco'
+      Required = True
+      FixedChar = True
+      Size = 3
+    end
+    object QryCobrancaeNuSequenciaContrato: TStringField
+      FieldName = 'eNuSequenciaContrato'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancatpRegistro: TStringField
+      FieldName = 'tpRegistro'
+      Required = True
+      FixedChar = True
+      Size = 3
+    end
+    object QryCobrancacdProduto: TStringField
+      FieldName = 'cdProduto'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancanuTitulo: TStringField
+      FieldName = 'nuTitulo'
+      Required = True
+      Size = 33
+    end
+    object QryCobrancanuCliente: TStringField
+      FieldName = 'nuCliente'
+      Required = True
+      Size = 33
+    end
+    object QryCobrancadtEmissaoTitulo: TDateField
+      FieldName = 'dtEmissaoTitulo'
+      Required = True
+    end
+    object QryCobrancadtVencimentoTitulo: TDateField
+      FieldName = 'dtVencimentoTitulo'
+    end
+    object QryCobrancatpVencimento: TStringField
+      FieldName = 'tpVencimento'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlNominalTitulo: TFMTBCDField
+      FieldName = 'vlNominalTitulo'
+      Precision = 18
+      Size = 2
+    end
+    object QryCobrancacdEspecieTitulo: TStringField
+      FieldName = 'cdEspecieTitulo'
+      Required = True
+      FixedChar = True
+      Size = 2
+    end
+    object QryCobrancatpProtestoAutomaticoNegativacao: TStringField
+      FieldName = 'tpProtestoAutomaticoNegativacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancaprazoProtestoAutomaticoNegativa: TStringField
+      FieldName = 'prazoProtestoAutomaticoNegativa'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancacontroleParticipante: TStringField
+      FieldName = 'controleParticipante'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancacdPagamentoParcial: TStringField
+      FieldName = 'cdPagamentoParcial'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancaqtdePagamentoParcial: TStringField
+      FieldName = 'qtdePagamentoParcial'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancapercentualJuros: TStringField
+      FieldName = 'percentualJuros'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlJuros: TStringField
+      FieldName = 'vlJuros'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancaqtdeDiasJuros: TStringField
+      FieldName = 'qtdeDiasJuros'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancapercentualMulta: TStringField
+      FieldName = 'percentualMulta'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlMulta: TStringField
+      FieldName = 'vlMulta'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancaqtdeDiasMulta: TStringField
+      FieldName = 'qtdeDiasMulta'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancapercentualDesconto1: TStringField
+      FieldName = 'percentualDesconto1'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlDesconto1: TFMTBCDField
+      FieldName = 'vlDesconto1'
+      Precision = 18
+      Size = 6
+    end
+    object QryCobrancadataLimiteDesconto1: TDateField
+      FieldName = 'dataLimiteDesconto1'
+    end
+    object QryCobrancapercentualDesconto2: TStringField
+      FieldName = 'percentualDesconto2'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlDesconto2: TFMTBCDField
+      FieldName = 'vlDesconto2'
+      Precision = 18
+      Size = 6
+    end
+    object QryCobrancadataLimiteDesconto2: TDateField
+      FieldName = 'dataLimiteDesconto2'
+    end
+    object QryCobrancapercentualDesconto3: TStringField
+      FieldName = 'percentualDesconto3'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlDesconto3: TFMTBCDField
+      FieldName = 'vlDesconto3'
+      Precision = 18
+      Size = 6
+    end
+    object QryCobrancadataLimiteDesconto3: TDateField
+      FieldName = 'dataLimiteDesconto3'
+    end
+    object QryCobrancaprazoBonificacao: TStringField
+      FieldName = 'prazoBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancapercentualBonificacao: TStringField
+      FieldName = 'percentualBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlBonificacao: TStringField
+      FieldName = 'vlBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancadtLimiteBonificacao: TStringField
+      FieldName = 'dtLimiteBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlAbatimento: TStringField
+      FieldName = 'vlAbatimento'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancavlIOF: TStringField
+      FieldName = 'vlIOF'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancanomePagador: TStringField
+      FieldName = 'nomePagador'
+      Required = True
+      Size = 50
+    end
+    object QryCobrancalogradouroPagador: TStringField
+      FieldName = 'logradouroPagador'
+      Size = 50
+    end
+    object QryCobrancanuLogradouroPagador: TStringField
+      FieldName = 'nuLogradouroPagador'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancacomplementoLogradouroPagador: TStringField
+      FieldName = 'complementoLogradouroPagador'
+      Size = 50
+    end
+    object QryCobrancacepPagador: TStringField
+      FieldName = 'cepPagador'
+      Size = 8
+    end
+    object QryCobrancacomplementoCepPagador: TStringField
+      FieldName = 'complementoCepPagador'
+      Size = 8
+    end
+    object QryCobrancabairroPagador: TStringField
+      FieldName = 'bairroPagador'
+      Size = 30
+    end
+    object QryCobrancamunicipioPagador: TStringField
+      FieldName = 'municipioPagador'
+      Size = 30
+    end
+    object QryCobrancaufPagador: TStringField
+      FieldName = 'ufPagador'
+      Size = 2
+    end
+    object QryCobrancacdIndCpfcnpjPagador: TStringField
+      FieldName = 'cdIndCpfcnpjPagador'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancanuCpfcnpjPagador: TStringField
+      FieldName = 'nuCpfcnpjPagador'
+      Size = 17
+    end
+    object QryCobrancaendEletronicoPagador: TStringField
+      FieldName = 'endEletronicoPagador'
+      Size = 150
+    end
+    object QryCobrancanomeSacadorAvalista: TStringField
+      FieldName = 'nomeSacadorAvalista'
+      Size = 50
+    end
+    object QryCobrancalogradouroSacadorAvalista: TStringField
+      FieldName = 'logradouroSacadorAvalista'
+      Size = 50
+    end
+    object QryCobrancanuLogradouroSacadorAvalista: TStringField
+      FieldName = 'nuLogradouroSacadorAvalista'
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancacomplementoLogradouroSacadorAva: TStringField
+      FieldName = 'complementoLogradouroSacadorAva'
+      Size = 50
+    end
+    object QryCobrancacepSacadorAvalista: TStringField
+      FieldName = 'cepSacadorAvalista'
+      Size = 8
+    end
+    object QryCobrancacomplementoCepSacadorAvalista: TStringField
+      FieldName = 'complementoCepSacadorAvalista'
+      Size = 8
+    end
+    object QryCobrancabairroSacadorAvalista: TStringField
+      FieldName = 'bairroSacadorAvalista'
+      Size = 30
+    end
+    object QryCobrancamunicipioSacadorAvalista: TStringField
+      FieldName = 'municipioSacadorAvalista'
+      Size = 30
+    end
+    object QryCobrancaufSacadorAvalista: TStringField
+      FieldName = 'ufSacadorAvalista'
+      Size = 2
+    end
+    object QryCobrancacdIndCpfcnpjSacadorAvalista: TStringField
+      FieldName = 'cdIndCpfcnpjSacadorAvalista'
+      FixedChar = True
+      Size = 1
+    end
+    object QryCobrancanuCpfcnpjSacadorAvalista: TStringField
+      FieldName = 'nuCpfcnpjSacadorAvalista'
+      Size = 17
+    end
+    object QryCobrancaendEletronicoSacadorAvalista: TStringField
+      FieldName = 'endEletronicoSacadorAvalista'
+      Size = 150
+    end
+    object QryCobrancaALCODG_ALUNO: TIntegerField
+      FieldName = 'ALCODG_ALUNO'
+      Required = True
+    end
+    object QryCobrancaPACODG_EMPRESA: TIntegerField
+      FieldName = 'PACODG_EMPRESA'
+      Required = True
+    end
+    object QryCobrancaPACODG_UNIDADE: TIntegerField
+      FieldName = 'PACODG_UNIDADE'
+      Required = True
+    end
+    object QryCobrancaPAANO_LETIVO: TIntegerField
+      FieldName = 'PAANO_LETIVO'
+      Required = True
+    end
+    object QryCobrancaPANUMR_PARCELA: TIntegerField
+      FieldName = 'PANUMR_PARCELA'
+      Required = True
+    end
+    object QryCobrancaALNOME_ALUNO: TStringField
+      FieldName = 'ALNOME_ALUNO'
+      Required = True
+      Size = 50
+    end
+    object QryCobrancaPADATA_VENCIMENTO: TDateField
+      FieldName = 'PADATA_VENCIMENTO'
+    end
+    object QryCobrancaPAVALR_PARCELA: TFMTBCDField
+      FieldName = 'PAVALR_PARCELA'
+      Precision = 18
+      Size = 2
+    end
+    object QryCobrancaPAVALR_DESCONTO: TFMTBCDField
+      FieldName = 'PAVALR_DESCONTO'
+      Precision = 18
+      Size = 2
+    end
+    object QryCobrancaPAVALR_PAGO: TFMTBCDField
+      FieldName = 'PAVALR_PAGO'
+      Precision = 18
+      Size = 2
+    end
+    object QryCobrancaAGENCIABENEFICIARIO: TStringField
+      FieldName = 'AGENCIABENEFICIARIO'
+      Size = 13
+    end
+    object QryCobrancaCONTABENEFICIARIO: TStringField
+      FieldName = 'CONTABENEFICIARIO'
+      Size = 11
+    end
+    object QryCobrancaCPFCNPJPAGADOR: TStringField
+      FieldName = 'CPFCNPJPAGADOR'
+      Size = 14
+    end
+    object QryCobrancaCNPJBENEFICIARIO: TStringField
+      FieldName = 'CNPJBENEFICIARIO'
+      Size = 14
+    end
+    object QryCobrancaCPFCNPJAVALISTA: TStringField
+      FieldName = 'CPFCNPJAVALISTA'
+      Size = 14
+    end
+    object QryCobrancaTUCODG_TURMA: TIntegerField
+      FieldName = 'TUCODG_TURMA'
+      Required = True
+    end
+    object QryCobrancaTUNOME_TURMA: TStringField
+      FieldName = 'TUNOME_TURMA'
+      Size = 30
+    end
+    object QryCobrancaVLRDESCONTO1: TFMTBCDField
+      FieldName = 'VLRDESCONTO1'
+      Precision = 18
+      Size = 6
+    end
+    object QryCobrancaVLRDESCONTO2: TFMTBCDField
+      FieldName = 'VLRDESCONTO2'
+      Precision = 18
+      Size = 6
+    end
+    object QryCobrancaVLRDESCONTO3: TFMTBCDField
+      FieldName = 'VLRDESCONTO3'
+      Precision = 18
+      Size = 6
+    end
+    object QryCobrancaSTATUS_PARCELA: TStringField
+      FieldName = 'STATUS_PARCELA'
+      Size = 2
+    end
+  end
+  object CdsCobranca: TClientDataSet
+    Aggregates = <>
+    IndexFieldNames = 'ALNOME_ALUNO'
+    Params = <>
+    ProviderName = 'DspCobranca'
+    Left = 320
+    Top = 198
+    object CdsCobrancaSELECIONAR: TIntegerField
+      Tag = 1
+      FieldKind = fkInternalCalc
+      FieldName = 'SELECIONAR'
+    end
+    object CdsCobrancaREINTEGRAR: TIntegerField
+      Tag = 1
+      FieldKind = fkInternalCalc
+      FieldName = 'REINTEGRAR'
+    end
+    object CdsCobrancanuCPFCNPJ: TStringField
+      FieldName = 'nuCPFCNPJ'
+      Size = 15
+    end
+    object CdsCobrancafilialCPFCNPJ: TStringField
+      FieldName = 'filialCPFCNPJ'
+      Size = 14
+    end
+    object CdsCobrancactrlCPFCNPJ: TStringField
+      FieldName = 'ctrlCPFCNPJ'
+      Size = 14
+    end
+    object CdsCobrancacdTipoAcesso: TStringField
+      FieldName = 'cdTipoAcesso'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancaclubBanco: TStringField
+      FieldName = 'clubBanco'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancacdTipoContrato: TStringField
+      FieldName = 'cdTipoContrato'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancanuSequenciaContrato: TStringField
+      FieldName = 'nuSequenciaContrato'
+      Required = True
+      FixedChar = True
+      Size = 10
+    end
+    object CdsCobrancaidProduto: TStringField
+      FieldName = 'idProduto'
+      Required = True
+      FixedChar = True
+      Size = 2
+    end
+    object CdsCobrancanuNegociacao: TStringField
+      FieldName = 'nuNegociacao'
+      Size = 24
+    end
+    object CdsCobrancacdBanco: TStringField
+      FieldName = 'cdBanco'
+      Required = True
+      FixedChar = True
+      Size = 3
+    end
+    object CdsCobrancaeNuSequenciaContrato: TStringField
+      FieldName = 'eNuSequenciaContrato'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancatpRegistro: TStringField
+      FieldName = 'tpRegistro'
+      Required = True
+      FixedChar = True
+      Size = 3
+    end
+    object CdsCobrancacdProduto: TStringField
+      FieldName = 'cdProduto'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancadtEmissaoTitulo: TDateField
+      FieldName = 'dtEmissaoTitulo'
+      Required = True
+    end
+    object CdsCobrancanuTitulo: TStringField
+      FieldName = 'nuTitulo'
+      Required = True
+      Size = 33
+    end
+    object CdsCobrancanuCliente: TStringField
+      FieldName = 'nuCliente'
+      Required = True
+      Size = 33
+    end
+    object CdsCobrancadtVencimentoTitulo: TDateField
+      FieldName = 'dtVencimentoTitulo'
+    end
+    object CdsCobrancatpVencimento: TStringField
+      FieldName = 'tpVencimento'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlNominalTitulo: TFMTBCDField
+      FieldName = 'vlNominalTitulo'
+      Precision = 18
+      Size = 2
+    end
+    object CdsCobrancacdEspecieTitulo: TStringField
+      FieldName = 'cdEspecieTitulo'
+      Required = True
+      FixedChar = True
+      Size = 2
+    end
+    object CdsCobrancatpProtestoAutomaticoNegativacao: TStringField
+      FieldName = 'tpProtestoAutomaticoNegativacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancaprazoProtestoAutomaticoNegativa: TStringField
+      FieldName = 'prazoProtestoAutomaticoNegativa'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancacontroleParticipante: TStringField
+      FieldName = 'controleParticipante'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancacdPagamentoParcial: TStringField
+      FieldName = 'cdPagamentoParcial'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancaqtdePagamentoParcial: TStringField
+      FieldName = 'qtdePagamentoParcial'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancapercentualJuros: TStringField
+      FieldName = 'percentualJuros'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlJuros: TStringField
+      FieldName = 'vlJuros'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancaqtdeDiasJuros: TStringField
+      FieldName = 'qtdeDiasJuros'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancapercentualMulta: TStringField
+      FieldName = 'percentualMulta'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlMulta: TStringField
+      FieldName = 'vlMulta'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancaqtdeDiasMulta: TStringField
+      FieldName = 'qtdeDiasMulta'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancapercentualDesconto1: TStringField
+      FieldName = 'percentualDesconto1'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlDesconto1: TFMTBCDField
+      FieldName = 'vlDesconto1'
+      Precision = 18
+      Size = 6
+    end
+    object CdsCobrancadataLimiteDesconto1: TDateField
+      FieldName = 'dataLimiteDesconto1'
+    end
+    object CdsCobrancapercentualDesconto2: TStringField
+      FieldName = 'percentualDesconto2'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlDesconto2: TFMTBCDField
+      FieldName = 'vlDesconto2'
+      Precision = 18
+      Size = 6
+    end
+    object CdsCobrancadataLimiteDesconto2: TDateField
+      FieldName = 'dataLimiteDesconto2'
+    end
+    object CdsCobrancapercentualDesconto3: TStringField
+      FieldName = 'percentualDesconto3'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlDesconto3: TFMTBCDField
+      FieldName = 'vlDesconto3'
+      Precision = 18
+      Size = 6
+    end
+    object CdsCobrancadataLimiteDesconto3: TDateField
+      FieldName = 'dataLimiteDesconto3'
+    end
+    object CdsCobrancaprazoBonificacao: TStringField
+      FieldName = 'prazoBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancapercentualBonificacao: TStringField
+      FieldName = 'percentualBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlBonificacao: TStringField
+      FieldName = 'vlBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancadtLimiteBonificacao: TStringField
+      FieldName = 'dtLimiteBonificacao'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlAbatimento: TStringField
+      FieldName = 'vlAbatimento'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancavlIOF: TStringField
+      FieldName = 'vlIOF'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancanomePagador: TStringField
+      FieldName = 'nomePagador'
+      Required = True
+      Size = 50
+    end
+    object CdsCobrancalogradouroPagador: TStringField
+      FieldName = 'logradouroPagador'
+      Size = 50
+    end
+    object CdsCobrancanuLogradouroPagador: TStringField
+      FieldName = 'nuLogradouroPagador'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancacomplementoLogradouroPagador: TStringField
+      FieldName = 'complementoLogradouroPagador'
+      Size = 50
+    end
+    object CdsCobrancacepPagador: TStringField
+      FieldName = 'cepPagador'
+      Size = 8
+    end
+    object CdsCobrancacomplementoCepPagador: TStringField
+      FieldName = 'complementoCepPagador'
+      Size = 8
+    end
+    object CdsCobrancabairroPagador: TStringField
+      FieldName = 'bairroPagador'
+      Size = 30
+    end
+    object CdsCobrancamunicipioPagador: TStringField
+      FieldName = 'municipioPagador'
+      Size = 30
+    end
+    object CdsCobrancaufPagador: TStringField
+      FieldName = 'ufPagador'
+      Size = 2
+    end
+    object CdsCobrancacdIndCpfcnpjPagador: TStringField
+      FieldName = 'cdIndCpfcnpjPagador'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancanuCpfcnpjPagador: TStringField
+      FieldName = 'nuCpfcnpjPagador'
+      Size = 17
+    end
+    object CdsCobrancaendEletronicoPagador: TStringField
+      FieldName = 'endEletronicoPagador'
+      Size = 150
+    end
+    object CdsCobrancanomeSacadorAvalista: TStringField
+      FieldName = 'nomeSacadorAvalista'
+      ProviderFlags = []
+      Size = 50
+    end
+    object CdsCobrancalogradouroSacadorAvalista: TStringField
+      FieldName = 'logradouroSacadorAvalista'
+      ProviderFlags = []
+      Size = 50
+    end
+    object CdsCobrancanuLogradouroSacadorAvalista: TStringField
+      FieldName = 'nuLogradouroSacadorAvalista'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancacomplementoLogradouroSacadorAva: TStringField
+      FieldName = 'complementoLogradouroSacadorAva'
+      ProviderFlags = []
+      Size = 50
+    end
+    object CdsCobrancacepSacadorAvalista: TStringField
+      FieldName = 'cepSacadorAvalista'
+      ProviderFlags = []
+      Size = 8
+    end
+    object CdsCobrancacomplementoCepSacadorAvalista: TStringField
+      FieldName = 'complementoCepSacadorAvalista'
+      ProviderFlags = []
+      Size = 8
+    end
+    object CdsCobrancabairroSacadorAvalista: TStringField
+      FieldName = 'bairroSacadorAvalista'
+      ProviderFlags = []
+      Size = 30
+    end
+    object CdsCobrancamunicipioSacadorAvalista: TStringField
+      FieldName = 'municipioSacadorAvalista'
+      ProviderFlags = []
+      Size = 30
+    end
+    object CdsCobrancaufSacadorAvalista: TStringField
+      FieldName = 'ufSacadorAvalista'
+      ProviderFlags = []
+      Size = 2
+    end
+    object CdsCobrancacdIndCpfcnpjSacadorAvalista: TStringField
+      FieldName = 'cdIndCpfcnpjSacadorAvalista'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 1
+    end
+    object CdsCobrancanuCpfcnpjSacadorAvalista: TStringField
+      FieldName = 'nuCpfcnpjSacadorAvalista'
+      ProviderFlags = []
+      Size = 17
+    end
+    object CdsCobrancaendEletronicoSacadorAvalista: TStringField
+      FieldName = 'endEletronicoSacadorAvalista'
+      ProviderFlags = []
+      Size = 150
+    end
+    object CdsCobrancaALCODG_ALUNO: TIntegerField
+      Tag = 1
+      FieldName = 'ALCODG_ALUNO'
+      Required = True
+    end
+    object CdsCobrancaPACODG_EMPRESA: TIntegerField
+      Tag = 1
+      FieldName = 'PACODG_EMPRESA'
+      Required = True
+    end
+    object CdsCobrancaPACODG_UNIDADE: TIntegerField
+      Tag = 1
+      FieldName = 'PACODG_UNIDADE'
+      Required = True
+    end
+    object CdsCobrancaPAANO_LETIVO: TIntegerField
+      Tag = 1
+      FieldName = 'PAANO_LETIVO'
+      Required = True
+    end
+    object CdsCobrancaPANUMR_PARCELA: TIntegerField
+      Tag = 1
+      FieldName = 'PANUMR_PARCELA'
+      Required = True
+    end
+    object CdsCobrancaALNOME_ALUNO: TStringField
+      Tag = 1
+      FieldName = 'ALNOME_ALUNO'
+      Required = True
+      Size = 50
+    end
+    object CdsCobrancaPADATA_VENCIMENTO: TDateField
+      Tag = 1
+      FieldName = 'PADATA_VENCIMENTO'
+    end
+    object CdsCobrancaPAVALR_PARCELA: TFMTBCDField
+      Tag = 1
+      FieldName = 'PAVALR_PARCELA'
+      DisplayFormat = '###,###,##0.00'
+      Precision = 18
+      Size = 2
+    end
+    object CdsCobrancaPAVALR_DESCONTO: TFMTBCDField
+      Tag = 1
+      FieldName = 'PAVALR_DESCONTO'
+      DisplayFormat = '###,###,##0.00'
+      Precision = 18
+      Size = 2
+    end
+    object CdsCobrancaPAVALR_PAGO: TFMTBCDField
+      Tag = 1
+      FieldName = 'PAVALR_PAGO'
+      DisplayFormat = '###,###,##0.00'
+      Precision = 18
+      Size = 2
+    end
+    object CdsCobrancaAGENCIABENEFICIARIO: TStringField
+      Tag = 1
+      FieldName = 'AGENCIABENEFICIARIO'
+      Size = 13
+    end
+    object CdsCobrancaCONTABENEFICIARIO: TStringField
+      Tag = 1
+      FieldName = 'CONTABENEFICIARIO'
+      Size = 11
+    end
+    object CdsCobrancaCPFCNPJPAGADOR: TStringField
+      Tag = 1
+      FieldName = 'CPFCNPJPAGADOR'
+      Size = 14
+    end
+    object CdsCobrancaCNPJBENEFICIARIO: TStringField
+      Tag = 1
+      FieldName = 'CNPJBENEFICIARIO'
+      Size = 14
+    end
+    object CdsCobrancaCPFCNPJAVALISTA: TStringField
+      Tag = 1
+      FieldName = 'CPFCNPJAVALISTA'
+      Size = 14
+    end
+    object CdsCobrancaTUCODG_TURMA: TIntegerField
+      Tag = 1
+      FieldName = 'TUCODG_TURMA'
+      Required = True
+    end
+    object CdsCobrancaTUNOME_TURMA: TStringField
+      Tag = 1
+      FieldName = 'TUNOME_TURMA'
+      Size = 30
+    end
+    object CdsCobrancaVLRDESCONTO1: TFMTBCDField
+      Tag = 1
+      FieldName = 'VLRDESCONTO1'
+      DisplayFormat = '###,###,##0.00'
+      Precision = 18
+      Size = 6
+    end
+    object CdsCobrancaVLRDESCONTO2: TFMTBCDField
+      Tag = 1
+      FieldName = 'VLRDESCONTO2'
+      DisplayFormat = '###,###,##0.00'
+      Precision = 18
+      Size = 6
+    end
+    object CdsCobrancaVLRDESCONTO3: TFMTBCDField
+      Tag = 1
+      FieldName = 'VLRDESCONTO3'
+      DisplayFormat = '###,###,##0.00'
+      Precision = 18
+      Size = 6
+    end
+    object CdsCobrancaSTATUS_PARCELA: TStringField
+      Tag = 1
+      FieldName = 'STATUS_PARCELA'
+      Size = 2
+    end
+  end
+  object DspCobranca: TDataSetProvider
+    DataSet = QryCobranca
+    Left = 264
+    Top = 198
+  end
+  object QryLogIntegracao: TSQLQuery
+    MaxBlobSize = 1
+    Params = <>
+    SQL.Strings = (
+      'SELECT * FROM LOGINTEGRACAO')
+    SQLConnection = SQLConnection1
+    Left = 200
+    Top = 254
+    object QryLogIntegracaoLICODG_EMPRESA: TIntegerField
+      FieldName = 'LICODG_EMPRESA'
+      Required = True
+    end
+    object QryLogIntegracaoLICODG_UNIDADE: TIntegerField
+      FieldName = 'LICODG_UNIDADE'
+      Required = True
+    end
+    object QryLogIntegracaoLICODG_ALUNO: TIntegerField
+      FieldName = 'LICODG_ALUNO'
+      Required = True
+    end
+    object QryLogIntegracaoLIANO_LETIVO: TIntegerField
+      FieldName = 'LIANO_LETIVO'
+      Required = True
+    end
+    object QryLogIntegracaoLINUMR_PARCELA: TIntegerField
+      FieldName = 'LINUMR_PARCELA'
+      Required = True
+    end
+    object QryLogIntegracaoLIDATA_PROCESSADO: TDateField
+      FieldName = 'LIDATA_PROCESSADO'
+    end
+    object QryLogIntegracaoLIHORA_PROCESSADO: TTimeField
+      FieldName = 'LIHORA_PROCESSADO'
+    end
+    object QryLogIntegracaoLIDATA_VENCIMENTO: TDateField
+      FieldName = 'LIDATA_VENCIMENTO'
+    end
+    object QryLogIntegracaoLIDESC_ESPECIE: TStringField
+      FieldName = 'LIDESC_ESPECIE'
+      Size = 40
+    end
+    object QryLogIntegracaoLIESPECIE_DOC_TITULO: TStringField
+      FieldName = 'LIESPECIE_DOC_TITULO'
+      Size = 3
+    end
+    object QryLogIntegracaoLIVL_TITULO: TFMTBCDField
+      FieldName = 'LIVL_TITULO'
+      Precision = 18
+      Size = 2
+    end
+    object QryLogIntegracaoLICPFCNPJPAGADOR: TStringField
+      FieldName = 'LICPFCNPJPAGADOR'
+      Size = 15
+    end
+    object QryLogIntegracaoLINOME_PAGADOR: TStringField
+      FieldName = 'LINOME_PAGADOR'
+      Size = 40
+    end
+    object QryLogIntegracaoENDERECOPAGADOR: TStringField
+      FieldName = 'ENDERECOPAGADOR'
+      Size = 40
+    end
+    object QryLogIntegracaoBAIRROPAGADOR: TStringField
+      FieldName = 'BAIRROPAGADOR'
+    end
+    object QryLogIntegracaoCEPPAGADOR: TStringField
+      FieldName = 'CEPPAGADOR'
+      Size = 9
+    end
+    object QryLogIntegracaoMUNICIPIOPAGADOR: TStringField
+      FieldName = 'MUNICIPIOPAGADOR'
+      Size = 40
+    end
+    object QryLogIntegracaoUFPAGADOR: TStringField
+      FieldName = 'UFPAGADOR'
+      Size = 2
+    end
+    object QryLogIntegracaoLICPFCNPJBENEFICIARIO: TStringField
+      FieldName = 'LICPFCNPJBENEFICIARIO'
+      Size = 15
+    end
+    object QryLogIntegracaoLINOME_BENEFICIARIO: TStringField
+      FieldName = 'LINOME_BENEFICIARIO'
+      Size = 40
+    end
+    object QryLogIntegracaoLOGRADOUROBENEFICIARIO: TStringField
+      FieldName = 'LOGRADOUROBENEFICIARIO'
+      Size = 40
+    end
+    object QryLogIntegracaoBAIRROBENEFICIARIO: TStringField
+      FieldName = 'BAIRROBENEFICIARIO'
+    end
+    object QryLogIntegracaoCEPBENEFICIARIO: TStringField
+      FieldName = 'CEPBENEFICIARIO'
+      Size = 9
+    end
+    object QryLogIntegracaoMUNICIPIOBENEFICIARIO: TStringField
+      FieldName = 'MUNICIPIOBENEFICIARIO'
+      Size = 50
+    end
+    object QryLogIntegracaoUFBENEFICIARIO: TStringField
+      FieldName = 'UFBENEFICIARIO'
+      Size = 2
+    end
+    object QryLogIntegracaoLIAGENCIA_BENEFICIARIO: TStringField
+      FieldName = 'LIAGENCIA_BENEFICIARIO'
+      Size = 6
+    end
+    object QryLogIntegracaoLICONTA_BENEFICIARIO: TStringField
+      FieldName = 'LICONTA_BENEFICIARIO'
+      Size = 9
+    end
+    object QryLogIntegracaoLINUMERO_DOCUMENTO: TStringField
+      FieldName = 'LINUMERO_DOCUMENTO'
+      Size = 15
+    end
+    object QryLogIntegracaoLINOSSO_NUMERO: TStringField
+      FieldName = 'LINOSSO_NUMERO'
+      Size = 15
+    end
+    object QryLogIntegracaoLICOD_BARRAS: TStringField
+      FieldName = 'LICOD_BARRAS'
+      Size = 112
+    end
+    object QryLogIntegracaoLILINHA_DIGITAVEL: TStringField
+      FieldName = 'LILINHA_DIGITAVEL'
+      Size = 54
+    end
+    object QryLogIntegracaoLICPFCNPJAVALISTA: TStringField
+      FieldName = 'LICPFCNPJAVALISTA'
+      Size = 15
+    end
+    object QryLogIntegracaoLINOME_AVALISTA: TStringField
+      FieldName = 'LINOME_AVALISTA'
+      Size = 40
+    end
+    object QryLogIntegracaoENDERECOAVALISTA: TStringField
+      FieldName = 'ENDERECOAVALISTA'
+      Size = 40
+    end
+    object QryLogIntegracaoCEPAVALISTA: TStringField
+      FieldName = 'CEPAVALISTA'
+      Size = 9
+    end
+    object QryLogIntegracaoMUNICIPIOAVALISTA: TStringField
+      FieldName = 'MUNICIPIOAVALISTA'
+      Size = 40
+    end
+    object QryLogIntegracaoUFAVALISTA: TStringField
+      FieldName = 'UFAVALISTA'
+      Size = 2
+    end
+    object QryLogIntegracaoLIDATA_EMISSAO: TDateField
+      FieldName = 'LIDATA_EMISSAO'
+    end
+    object QryLogIntegracaoLICARTEIRA: TStringField
+      FieldName = 'LICARTEIRA'
+      Size = 3
+    end
+    object QryLogIntegracaoLIQUANTIDADE: TIntegerField
+      FieldName = 'LIQUANTIDADE'
+    end
+    object QryLogIntegracaoLIACEITE: TStringField
+      FieldName = 'LIACEITE'
+      Size = 1
+    end
+    object QryLogIntegracaoLIINSTRUCOES: TBlobField
+      FieldName = 'LIINSTRUCOES'
+      Size = 1
+    end
+    object QryLogIntegracaoLIARQUIVO_ENVIO: TBlobField
+      FieldName = 'LIARQUIVO_ENVIO'
+      Required = True
+      Size = 1
+    end
+    object QryLogIntegracaoLIARQUIVO_REBIMENTO: TBlobField
+      FieldName = 'LIARQUIVO_REBIMENTO'
+      Required = True
+      Size = 1
+    end
+    object QryLogIntegracaoLISTATUS_TITULO: TStringField
+      FieldName = 'LISTATUS_TITULO'
+      Size = 2
+    end
+    object QryLogIntegracaoLICODG_TURMA: TIntegerField
+      FieldName = 'LICODG_TURMA'
+    end
+  end
+  object CdsLogIntegracao: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'DspLogIntegracao'
+    Left = 320
+    Top = 254
+    object CdsLogIntegracaoLICODG_EMPRESA: TIntegerField
+      FieldName = 'LICODG_EMPRESA'
+      Required = True
+    end
+    object CdsLogIntegracaoLICODG_UNIDADE: TIntegerField
+      FieldName = 'LICODG_UNIDADE'
+      Required = True
+    end
+    object CdsLogIntegracaoLICODG_ALUNO: TIntegerField
+      FieldName = 'LICODG_ALUNO'
+      Required = True
+    end
+    object CdsLogIntegracaoLIANO_LETIVO: TIntegerField
+      FieldName = 'LIANO_LETIVO'
+      Required = True
+    end
+    object CdsLogIntegracaoLINUMR_PARCELA: TIntegerField
+      FieldName = 'LINUMR_PARCELA'
+      Required = True
+    end
+    object CdsLogIntegracaoLIDATA_PROCESSADO: TDateField
+      FieldName = 'LIDATA_PROCESSADO'
+    end
+    object CdsLogIntegracaoLIHORA_PROCESSADO: TTimeField
+      FieldName = 'LIHORA_PROCESSADO'
+    end
+    object CdsLogIntegracaoLIDATA_VENCIMENTO: TDateField
+      FieldName = 'LIDATA_VENCIMENTO'
+    end
+    object CdsLogIntegracaoLIDESC_ESPECIE: TStringField
+      FieldName = 'LIDESC_ESPECIE'
+      Size = 40
+    end
+    object CdsLogIntegracaoLIESPECIE_DOC_TITULO: TStringField
+      FieldName = 'LIESPECIE_DOC_TITULO'
+      Size = 3
+    end
+    object CdsLogIntegracaoLIVL_TITULO: TFMTBCDField
+      FieldName = 'LIVL_TITULO'
+      Precision = 18
+      Size = 2
+    end
+    object CdsLogIntegracaoLICPFCNPJPAGADOR: TStringField
+      FieldName = 'LICPFCNPJPAGADOR'
+      Size = 15
+    end
+    object CdsLogIntegracaoLINOME_PAGADOR: TStringField
+      FieldName = 'LINOME_PAGADOR'
+      Size = 40
+    end
+    object CdsLogIntegracaoENDERECOPAGADOR: TStringField
+      FieldName = 'ENDERECOPAGADOR'
+      Size = 40
+    end
+    object CdsLogIntegracaoBAIRROPAGADOR: TStringField
+      FieldName = 'BAIRROPAGADOR'
+    end
+    object CdsLogIntegracaoCEPPAGADOR: TStringField
+      FieldName = 'CEPPAGADOR'
+      Size = 9
+    end
+    object CdsLogIntegracaoMUNICIPIOPAGADOR: TStringField
+      FieldName = 'MUNICIPIOPAGADOR'
+      Size = 40
+    end
+    object CdsLogIntegracaoUFPAGADOR: TStringField
+      FieldName = 'UFPAGADOR'
+      Size = 2
+    end
+    object CdsLogIntegracaoLICPFCNPJBENEFICIARIO: TStringField
+      FieldName = 'LICPFCNPJBENEFICIARIO'
+      Size = 15
+    end
+    object CdsLogIntegracaoLINOME_BENEFICIARIO: TStringField
+      FieldName = 'LINOME_BENEFICIARIO'
+      Size = 40
+    end
+    object CdsLogIntegracaoLOGRADOUROBENEFICIARIO: TStringField
+      FieldName = 'LOGRADOUROBENEFICIARIO'
+      Size = 40
+    end
+    object CdsLogIntegracaoBAIRROBENEFICIARIO: TStringField
+      FieldName = 'BAIRROBENEFICIARIO'
+    end
+    object CdsLogIntegracaoCEPBENEFICIARIO: TStringField
+      FieldName = 'CEPBENEFICIARIO'
+      Size = 9
+    end
+    object CdsLogIntegracaoMUNICIPIOBENEFICIARIO: TStringField
+      FieldName = 'MUNICIPIOBENEFICIARIO'
+      Size = 50
+    end
+    object CdsLogIntegracaoUFBENEFICIARIO: TStringField
+      FieldName = 'UFBENEFICIARIO'
+      Size = 2
+    end
+    object CdsLogIntegracaoLIAGENCIA_BENEFICIARIO: TStringField
+      FieldName = 'LIAGENCIA_BENEFICIARIO'
+      Size = 6
+    end
+    object CdsLogIntegracaoLICONTA_BENEFICIARIO: TStringField
+      FieldName = 'LICONTA_BENEFICIARIO'
+      Size = 9
+    end
+    object CdsLogIntegracaoLINUMERO_DOCUMENTO: TStringField
+      FieldName = 'LINUMERO_DOCUMENTO'
+      Size = 15
+    end
+    object CdsLogIntegracaoLINOSSO_NUMERO: TStringField
+      FieldName = 'LINOSSO_NUMERO'
+      Size = 15
+    end
+    object CdsLogIntegracaoLICOD_BARRAS: TStringField
+      FieldName = 'LICOD_BARRAS'
+      Size = 112
+    end
+    object CdsLogIntegracaoLILINHA_DIGITAVEL: TStringField
+      FieldName = 'LILINHA_DIGITAVEL'
+      Size = 54
+    end
+    object CdsLogIntegracaoLICPFCNPJAVALISTA: TStringField
+      FieldName = 'LICPFCNPJAVALISTA'
+      Size = 15
+    end
+    object CdsLogIntegracaoLINOME_AVALISTA: TStringField
+      FieldName = 'LINOME_AVALISTA'
+      Size = 40
+    end
+    object CdsLogIntegracaoENDERECOAVALISTA: TStringField
+      FieldName = 'ENDERECOAVALISTA'
+      Size = 40
+    end
+    object CdsLogIntegracaoCEPAVALISTA: TStringField
+      FieldName = 'CEPAVALISTA'
+      Size = 9
+    end
+    object CdsLogIntegracaoMUNICIPIOAVALISTA: TStringField
+      FieldName = 'MUNICIPIOAVALISTA'
+      Size = 40
+    end
+    object CdsLogIntegracaoUFAVALISTA: TStringField
+      FieldName = 'UFAVALISTA'
+      Size = 2
+    end
+    object CdsLogIntegracaoLIDATA_EMISSAO: TDateField
+      FieldName = 'LIDATA_EMISSAO'
+    end
+    object CdsLogIntegracaoLICARTEIRA: TStringField
+      FieldName = 'LICARTEIRA'
+      Size = 3
+    end
+    object CdsLogIntegracaoLIQUANTIDADE: TIntegerField
+      FieldName = 'LIQUANTIDADE'
+    end
+    object CdsLogIntegracaoLIACEITE: TStringField
+      FieldName = 'LIACEITE'
+      Size = 1
+    end
+    object CdsLogIntegracaoLIINSTRUCOES: TBlobField
+      FieldName = 'LIINSTRUCOES'
+      Size = 1
+    end
+    object CdsLogIntegracaoLIARQUIVO_ENVIO: TBlobField
+      FieldName = 'LIARQUIVO_ENVIO'
+      Required = True
+      Size = 1
+    end
+    object CdsLogIntegracaoLIARQUIVO_REBIMENTO: TBlobField
+      FieldName = 'LIARQUIVO_REBIMENTO'
+      Required = True
+      Size = 1
+    end
+    object CdsLogIntegracaoLISTATUS_TITULO: TStringField
+      FieldName = 'LISTATUS_TITULO'
+      Size = 2
+    end
+    object CdsLogIntegracaoLICODG_TURMA: TIntegerField
+      FieldName = 'LICODG_TURMA'
+    end
+  end
+  object DspLogIntegracao: TDataSetProvider
+    DataSet = QryLogIntegracao
+    Left = 264
+    Top = 254
+  end
+  object qryAux: TSQLQuery
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = SQLConnection1
+    Left = 424
+    Top = 160
+  end
+  object QryBoleto: TSQLQuery
+    MaxBlobSize = 1
+    Params = <
+      item
+        DataType = ftUnknown
+        Name = 'LINUMR_PARCELA'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LIANO_LETIVO'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LICODG_EMPRESA'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LICODG_UNIDADE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LICODG_ALUNO'
+        ParamType = ptInput
+      end>
+    SQL.Strings = (
+      'SELECT FIRST 1 logi.*'
+      'FROM LOGINTEGRACAO logi'
+      'WHERE logi.LISTATUS_TITULO IN ( '#39'0'#39', '#39'69'#39' )'
+      'AND   logi.LINUMR_PARCELA = :LINUMR_PARCELA'
+      'AND   logi.LIANO_LETIVO   = :LIANO_LETIVO'
+      'AND   logi.LICODG_EMPRESA = :LICODG_EMPRESA'
+      'AND   logi.LICODG_UNIDADE = :LICODG_UNIDADE'
+      'AND   logi.LICODG_ALUNO   = :LICODG_ALUNO'
+      'ORDER BY logi.lihora_processado, logi.lidata_processado DESC')
+    SQLConnection = SQLConnection1
+    Left = 200
+    Top = 380
+    object QryBoletoLICODG_EMPRESA: TIntegerField
+      FieldName = 'LICODG_EMPRESA'
+      Required = True
+    end
+    object QryBoletoLICODG_UNIDADE: TIntegerField
+      FieldName = 'LICODG_UNIDADE'
+      Required = True
+    end
+    object QryBoletoLICODG_ALUNO: TIntegerField
+      FieldName = 'LICODG_ALUNO'
+      Required = True
+    end
+    object QryBoletoLIANO_LETIVO: TIntegerField
+      FieldName = 'LIANO_LETIVO'
+      Required = True
+    end
+    object QryBoletoLINUMR_PARCELA: TIntegerField
+      FieldName = 'LINUMR_PARCELA'
+      Required = True
+    end
+    object QryBoletoLIDATA_PROCESSADO: TDateField
+      FieldName = 'LIDATA_PROCESSADO'
+    end
+    object QryBoletoLIHORA_PROCESSADO: TTimeField
+      FieldName = 'LIHORA_PROCESSADO'
+    end
+    object QryBoletoLIDATA_VENCIMENTO: TDateField
+      FieldName = 'LIDATA_VENCIMENTO'
+    end
+    object QryBoletoLIDESC_ESPECIE: TStringField
+      FieldName = 'LIDESC_ESPECIE'
+      Size = 40
+    end
+    object QryBoletoLIESPECIE_DOC_TITULO: TStringField
+      FieldName = 'LIESPECIE_DOC_TITULO'
+      Size = 3
+    end
+    object QryBoletoLIVL_TITULO: TFMTBCDField
+      FieldName = 'LIVL_TITULO'
+      Precision = 18
+      Size = 2
+    end
+    object QryBoletoLICPFCNPJPAGADOR: TStringField
+      FieldName = 'LICPFCNPJPAGADOR'
+      Size = 15
+    end
+    object QryBoletoLINOME_PAGADOR: TStringField
+      FieldName = 'LINOME_PAGADOR'
+      Size = 40
+    end
+    object QryBoletoENDERECOPAGADOR: TStringField
+      FieldName = 'ENDERECOPAGADOR'
+      Size = 40
+    end
+    object QryBoletoBAIRROPAGADOR: TStringField
+      FieldName = 'BAIRROPAGADOR'
+    end
+    object QryBoletoCEPPAGADOR: TStringField
+      FieldName = 'CEPPAGADOR'
+      Size = 9
+    end
+    object QryBoletoMUNICIPIOPAGADOR: TStringField
+      FieldName = 'MUNICIPIOPAGADOR'
+      Size = 40
+    end
+    object QryBoletoUFPAGADOR: TStringField
+      FieldName = 'UFPAGADOR'
+      Size = 2
+    end
+    object QryBoletoLICPFCNPJBENEFICIARIO: TStringField
+      FieldName = 'LICPFCNPJBENEFICIARIO'
+      Size = 15
+    end
+    object QryBoletoLINOME_BENEFICIARIO: TStringField
+      FieldName = 'LINOME_BENEFICIARIO'
+      Size = 40
+    end
+    object QryBoletoLOGRADOUROBENEFICIARIO: TStringField
+      FieldName = 'LOGRADOUROBENEFICIARIO'
+      Size = 40
+    end
+    object QryBoletoBAIRROBENEFICIARIO: TStringField
+      FieldName = 'BAIRROBENEFICIARIO'
+    end
+    object QryBoletoCEPBENEFICIARIO: TStringField
+      FieldName = 'CEPBENEFICIARIO'
+      Size = 9
+    end
+    object QryBoletoMUNICIPIOBENEFICIARIO: TStringField
+      FieldName = 'MUNICIPIOBENEFICIARIO'
+      Size = 50
+    end
+    object QryBoletoUFBENEFICIARIO: TStringField
+      FieldName = 'UFBENEFICIARIO'
+      Size = 2
+    end
+    object QryBoletoLIAGENCIA_BENEFICIARIO: TStringField
+      FieldName = 'LIAGENCIA_BENEFICIARIO'
+      Size = 6
+    end
+    object QryBoletoLICONTA_BENEFICIARIO: TStringField
+      FieldName = 'LICONTA_BENEFICIARIO'
+      Size = 9
+    end
+    object QryBoletoLINUMERO_DOCUMENTO: TStringField
+      FieldName = 'LINUMERO_DOCUMENTO'
+      Size = 15
+    end
+    object QryBoletoLINOSSO_NUMERO: TStringField
+      FieldName = 'LINOSSO_NUMERO'
+      Size = 15
+    end
+    object QryBoletoLICOD_BARRAS: TStringField
+      FieldName = 'LICOD_BARRAS'
+      Size = 112
+    end
+    object QryBoletoLILINHA_DIGITAVEL: TStringField
+      FieldName = 'LILINHA_DIGITAVEL'
+      Size = 54
+    end
+    object QryBoletoLICPFCNPJAVALISTA: TStringField
+      FieldName = 'LICPFCNPJAVALISTA'
+      Size = 15
+    end
+    object QryBoletoLINOME_AVALISTA: TStringField
+      FieldName = 'LINOME_AVALISTA'
+      Size = 40
+    end
+    object QryBoletoENDERECOAVALISTA: TStringField
+      FieldName = 'ENDERECOAVALISTA'
+      Size = 40
+    end
+    object QryBoletoCEPAVALISTA: TStringField
+      FieldName = 'CEPAVALISTA'
+      Size = 9
+    end
+    object QryBoletoMUNICIPIOAVALISTA: TStringField
+      FieldName = 'MUNICIPIOAVALISTA'
+      Size = 40
+    end
+    object QryBoletoUFAVALISTA: TStringField
+      FieldName = 'UFAVALISTA'
+      Size = 2
+    end
+    object QryBoletoLIDATA_EMISSAO: TDateField
+      FieldName = 'LIDATA_EMISSAO'
+    end
+    object QryBoletoLICARTEIRA: TStringField
+      FieldName = 'LICARTEIRA'
+      Size = 3
+    end
+    object QryBoletoLIQUANTIDADE: TIntegerField
+      FieldName = 'LIQUANTIDADE'
+    end
+    object QryBoletoLIACEITE: TStringField
+      FieldName = 'LIACEITE'
+      Size = 1
+    end
+    object QryBoletoLIINSTRUCOES: TBlobField
+      FieldName = 'LIINSTRUCOES'
+      Size = 1
+    end
+    object QryBoletoLIARQUIVO_ENVIO: TBlobField
+      FieldName = 'LIARQUIVO_ENVIO'
+      Required = True
+      Size = 1
+    end
+    object QryBoletoLIARQUIVO_REBIMENTO: TBlobField
+      FieldName = 'LIARQUIVO_REBIMENTO'
+      Required = True
+      Size = 1
+    end
+    object QryBoletoLISTATUS_TITULO: TStringField
+      FieldName = 'LISTATUS_TITULO'
+      Size = 2
+    end
+  end
+  object CdsBoleto: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'DspBoleto'
+    Left = 320
+    Top = 380
+    object CdsBoletoLICODG_EMPRESA: TIntegerField
+      FieldName = 'LICODG_EMPRESA'
+      Required = True
+    end
+    object CdsBoletoLICODG_UNIDADE: TIntegerField
+      FieldName = 'LICODG_UNIDADE'
+      Required = True
+    end
+    object CdsBoletoLICODG_ALUNO: TIntegerField
+      FieldName = 'LICODG_ALUNO'
+      Required = True
+    end
+    object CdsBoletoLIANO_LETIVO: TIntegerField
+      FieldName = 'LIANO_LETIVO'
+      Required = True
+    end
+    object CdsBoletoLINUMR_PARCELA: TIntegerField
+      FieldName = 'LINUMR_PARCELA'
+      Required = True
+    end
+    object CdsBoletoLIDATA_PROCESSADO: TDateField
+      FieldName = 'LIDATA_PROCESSADO'
+    end
+    object CdsBoletoLIHORA_PROCESSADO: TTimeField
+      FieldName = 'LIHORA_PROCESSADO'
+    end
+    object CdsBoletoLIDATA_VENCIMENTO: TDateField
+      FieldName = 'LIDATA_VENCIMENTO'
+    end
+    object CdsBoletoLIDESC_ESPECIE: TStringField
+      FieldName = 'LIDESC_ESPECIE'
+      Size = 40
+    end
+    object CdsBoletoLIESPECIE_DOC_TITULO: TStringField
+      FieldName = 'LIESPECIE_DOC_TITULO'
+      Size = 3
+    end
+    object CdsBoletoLIVL_TITULO: TFMTBCDField
+      FieldName = 'LIVL_TITULO'
+      Precision = 18
+      Size = 2
+    end
+    object CdsBoletoLICPFCNPJPAGADOR: TStringField
+      FieldName = 'LICPFCNPJPAGADOR'
+      Size = 15
+    end
+    object CdsBoletoLINOME_PAGADOR: TStringField
+      FieldName = 'LINOME_PAGADOR'
+      Size = 40
+    end
+    object CdsBoletoENDERECOPAGADOR: TStringField
+      FieldName = 'ENDERECOPAGADOR'
+      Size = 40
+    end
+    object CdsBoletoBAIRROPAGADOR: TStringField
+      FieldName = 'BAIRROPAGADOR'
+    end
+    object CdsBoletoCEPPAGADOR: TStringField
+      FieldName = 'CEPPAGADOR'
+      Size = 9
+    end
+    object CdsBoletoMUNICIPIOPAGADOR: TStringField
+      FieldName = 'MUNICIPIOPAGADOR'
+      Size = 40
+    end
+    object CdsBoletoUFPAGADOR: TStringField
+      FieldName = 'UFPAGADOR'
+      Size = 2
+    end
+    object CdsBoletoLICPFCNPJBENEFICIARIO: TStringField
+      FieldName = 'LICPFCNPJBENEFICIARIO'
+      Size = 15
+    end
+    object CdsBoletoLINOME_BENEFICIARIO: TStringField
+      FieldName = 'LINOME_BENEFICIARIO'
+      Size = 40
+    end
+    object CdsBoletoLOGRADOUROBENEFICIARIO: TStringField
+      FieldName = 'LOGRADOUROBENEFICIARIO'
+      Size = 40
+    end
+    object CdsBoletoBAIRROBENEFICIARIO: TStringField
+      FieldName = 'BAIRROBENEFICIARIO'
+    end
+    object CdsBoletoCEPBENEFICIARIO: TStringField
+      FieldName = 'CEPBENEFICIARIO'
+      Size = 9
+    end
+    object CdsBoletoMUNICIPIOBENEFICIARIO: TStringField
+      FieldName = 'MUNICIPIOBENEFICIARIO'
+      Size = 50
+    end
+    object CdsBoletoUFBENEFICIARIO: TStringField
+      FieldName = 'UFBENEFICIARIO'
+      Size = 2
+    end
+    object CdsBoletoLIAGENCIA_BENEFICIARIO: TStringField
+      FieldName = 'LIAGENCIA_BENEFICIARIO'
+      Size = 6
+    end
+    object CdsBoletoLICONTA_BENEFICIARIO: TStringField
+      FieldName = 'LICONTA_BENEFICIARIO'
+      Size = 9
+    end
+    object CdsBoletoLINUMERO_DOCUMENTO: TStringField
+      FieldName = 'LINUMERO_DOCUMENTO'
+      Size = 15
+    end
+    object CdsBoletoLINOSSO_NUMERO: TStringField
+      FieldName = 'LINOSSO_NUMERO'
+      Size = 15
+    end
+    object CdsBoletoLICOD_BARRAS: TStringField
+      FieldName = 'LICOD_BARRAS'
+      Size = 112
+    end
+    object CdsBoletoLILINHA_DIGITAVEL: TStringField
+      FieldName = 'LILINHA_DIGITAVEL'
+      Size = 54
+    end
+    object CdsBoletoLICPFCNPJAVALISTA: TStringField
+      FieldName = 'LICPFCNPJAVALISTA'
+      Size = 15
+    end
+    object CdsBoletoLINOME_AVALISTA: TStringField
+      FieldName = 'LINOME_AVALISTA'
+      Size = 40
+    end
+    object CdsBoletoENDERECOAVALISTA: TStringField
+      FieldName = 'ENDERECOAVALISTA'
+      Size = 40
+    end
+    object CdsBoletoCEPAVALISTA: TStringField
+      FieldName = 'CEPAVALISTA'
+      Size = 9
+    end
+    object CdsBoletoMUNICIPIOAVALISTA: TStringField
+      FieldName = 'MUNICIPIOAVALISTA'
+      Size = 40
+    end
+    object CdsBoletoUFAVALISTA: TStringField
+      FieldName = 'UFAVALISTA'
+      Size = 2
+    end
+    object CdsBoletoLIDATA_EMISSAO: TDateField
+      FieldName = 'LIDATA_EMISSAO'
+    end
+    object CdsBoletoLICARTEIRA: TStringField
+      FieldName = 'LICARTEIRA'
+      Size = 3
+    end
+    object CdsBoletoLIQUANTIDADE: TIntegerField
+      FieldName = 'LIQUANTIDADE'
+    end
+    object CdsBoletoLIACEITE: TStringField
+      FieldName = 'LIACEITE'
+      Size = 1
+    end
+    object CdsBoletoLIINSTRUCOES: TBlobField
+      FieldName = 'LIINSTRUCOES'
+      Size = 1
+    end
+    object CdsBoletoLIARQUIVO_ENVIO: TBlobField
+      FieldName = 'LIARQUIVO_ENVIO'
+      Required = True
+      Size = 1
+    end
+    object CdsBoletoLIARQUIVO_REBIMENTO: TBlobField
+      FieldName = 'LIARQUIVO_REBIMENTO'
+      Required = True
+      Size = 1
+    end
+    object CdsBoletoLISTATUS_TITULO: TStringField
+      FieldName = 'LISTATUS_TITULO'
+      Size = 2
+    end
+  end
+  object DspBoleto: TDataSetProvider
+    DataSet = QryBoleto
+    Left = 264
+    Top = 380
+  end
+  object dsBoleto: TDataSource
+    DataSet = CdsBoleto
+    Left = 384
+    Top = 380
+  end
+  object QryConsultaLogIntegracao: TSQLQuery
+    MaxBlobSize = 1
+    Params = <
+      item
+        DataType = ftUnknown
+        Name = 'LINUMR_PARCELA'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LIANO_LETIVO'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LICODG_EMPRESA'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LICODG_UNIDADE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftUnknown
+        Name = 'LICODG_ALUNO'
+        ParamType = ptInput
+      end>
+    SQL.Strings = (
+      'SELECT logi.*'
+      'FROM LOGINTEGRACAO logi'
+      'WHERE logi.LINUMR_PARCELA = :LINUMR_PARCELA'
+      'AND   logi.LIANO_LETIVO   = :LIANO_LETIVO'
+      'AND   logi.LICODG_EMPRESA = :LICODG_EMPRESA'
+      'AND   logi.LICODG_UNIDADE = :LICODG_UNIDADE'
+      'AND   logi.LICODG_ALUNO   = :LICODG_ALUNO'
+      
+        'ORDER BY logi.lidata_processado desc, logi.lihora_processado des' +
+        'c')
+    SQLConnection = SQLConnection1
+    Left = 200
+    Top = 310
+    object IntegerField1: TIntegerField
+      FieldName = 'LICODG_EMPRESA'
+      Required = True
+    end
+    object IntegerField2: TIntegerField
+      FieldName = 'LICODG_UNIDADE'
+      Required = True
+    end
+    object IntegerField3: TIntegerField
+      FieldName = 'LICODG_ALUNO'
+      Required = True
+    end
+    object IntegerField4: TIntegerField
+      FieldName = 'LIANO_LETIVO'
+      Required = True
+    end
+    object IntegerField5: TIntegerField
+      FieldName = 'LINUMR_PARCELA'
+      Required = True
+    end
+    object DateField1: TDateField
+      FieldName = 'LIDATA_PROCESSADO'
+    end
+    object TimeField1: TTimeField
+      FieldName = 'LIHORA_PROCESSADO'
+    end
+    object DateField2: TDateField
+      FieldName = 'LIDATA_VENCIMENTO'
+    end
+    object StringField1: TStringField
+      FieldName = 'LIDESC_ESPECIE'
+      Size = 40
+    end
+    object StringField2: TStringField
+      FieldName = 'LIESPECIE_DOC_TITULO'
+      Size = 3
+    end
+    object FMTBCDField1: TFMTBCDField
+      FieldName = 'LIVL_TITULO'
+      Precision = 18
+      Size = 2
+    end
+    object StringField3: TStringField
+      FieldName = 'LICPFCNPJPAGADOR'
+      Size = 15
+    end
+    object StringField4: TStringField
+      FieldName = 'LINOME_PAGADOR'
+      Size = 40
+    end
+    object StringField5: TStringField
+      FieldName = 'ENDERECOPAGADOR'
+      Size = 40
+    end
+    object StringField6: TStringField
+      FieldName = 'BAIRROPAGADOR'
+    end
+    object StringField7: TStringField
+      FieldName = 'CEPPAGADOR'
+      Size = 9
+    end
+    object StringField8: TStringField
+      FieldName = 'MUNICIPIOPAGADOR'
+      Size = 40
+    end
+    object StringField9: TStringField
+      FieldName = 'UFPAGADOR'
+      Size = 2
+    end
+    object StringField10: TStringField
+      FieldName = 'LICPFCNPJBENEFICIARIO'
+      Size = 15
+    end
+    object StringField11: TStringField
+      FieldName = 'LINOME_BENEFICIARIO'
+      Size = 40
+    end
+    object StringField12: TStringField
+      FieldName = 'LOGRADOUROBENEFICIARIO'
+      Size = 40
+    end
+    object StringField13: TStringField
+      FieldName = 'BAIRROBENEFICIARIO'
+    end
+    object StringField14: TStringField
+      FieldName = 'CEPBENEFICIARIO'
+      Size = 9
+    end
+    object StringField15: TStringField
+      FieldName = 'MUNICIPIOBENEFICIARIO'
+      Size = 50
+    end
+    object StringField16: TStringField
+      FieldName = 'UFBENEFICIARIO'
+      Size = 2
+    end
+    object StringField17: TStringField
+      FieldName = 'LIAGENCIA_BENEFICIARIO'
+      Size = 6
+    end
+    object StringField18: TStringField
+      FieldName = 'LICONTA_BENEFICIARIO'
+      Size = 9
+    end
+    object StringField19: TStringField
+      FieldName = 'LINUMERO_DOCUMENTO'
+      Size = 15
+    end
+    object StringField20: TStringField
+      FieldName = 'LINOSSO_NUMERO'
+      Size = 15
+    end
+    object StringField21: TStringField
+      FieldName = 'LICOD_BARRAS'
+      Size = 112
+    end
+    object StringField22: TStringField
+      FieldName = 'LILINHA_DIGITAVEL'
+      Size = 54
+    end
+    object StringField23: TStringField
+      FieldName = 'LICPFCNPJAVALISTA'
+      Size = 15
+    end
+    object StringField24: TStringField
+      FieldName = 'LINOME_AVALISTA'
+      Size = 40
+    end
+    object StringField25: TStringField
+      FieldName = 'ENDERECOAVALISTA'
+      Size = 40
+    end
+    object StringField26: TStringField
+      FieldName = 'CEPAVALISTA'
+      Size = 9
+    end
+    object StringField27: TStringField
+      FieldName = 'MUNICIPIOAVALISTA'
+      Size = 40
+    end
+    object StringField28: TStringField
+      FieldName = 'UFAVALISTA'
+      Size = 2
+    end
+    object DateField3: TDateField
+      FieldName = 'LIDATA_EMISSAO'
+    end
+    object StringField29: TStringField
+      FieldName = 'LICARTEIRA'
+      Size = 3
+    end
+    object IntegerField6: TIntegerField
+      FieldName = 'LIQUANTIDADE'
+    end
+    object StringField30: TStringField
+      FieldName = 'LIACEITE'
+      Size = 1
+    end
+    object BlobField1: TBlobField
+      FieldName = 'LIINSTRUCOES'
+      Size = 1
+    end
+    object BlobField2: TBlobField
+      FieldName = 'LIARQUIVO_ENVIO'
+      Required = True
+      Size = 1
+    end
+    object BlobField3: TBlobField
+      FieldName = 'LIARQUIVO_REBIMENTO'
+      Required = True
+      Size = 1
+    end
+    object StringField31: TStringField
+      FieldName = 'LISTATUS_TITULO'
+      Size = 2
+    end
+    object IntegerField7: TIntegerField
+      FieldName = 'LICODG_TURMA'
+    end
+  end
+  object cdsConsultaLogIntegracao: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dspConsultaLogIntegracao'
+    Left = 320
+    Top = 310
+    object IntegerField8: TIntegerField
+      FieldName = 'LICODG_EMPRESA'
+      Required = True
+    end
+    object IntegerField9: TIntegerField
+      FieldName = 'LICODG_UNIDADE'
+      Required = True
+    end
+    object IntegerField10: TIntegerField
+      FieldName = 'LICODG_ALUNO'
+      Required = True
+    end
+    object IntegerField11: TIntegerField
+      FieldName = 'LIANO_LETIVO'
+      Required = True
+    end
+    object IntegerField12: TIntegerField
+      FieldName = 'LINUMR_PARCELA'
+      Required = True
+    end
+    object DateField4: TDateField
+      FieldName = 'LIDATA_PROCESSADO'
+    end
+    object TimeField2: TTimeField
+      FieldName = 'LIHORA_PROCESSADO'
+    end
+    object DateField5: TDateField
+      FieldName = 'LIDATA_VENCIMENTO'
+    end
+    object StringField32: TStringField
+      FieldName = 'LIDESC_ESPECIE'
+      Size = 40
+    end
+    object StringField33: TStringField
+      FieldName = 'LIESPECIE_DOC_TITULO'
+      Size = 3
+    end
+    object FMTBCDField2: TFMTBCDField
+      FieldName = 'LIVL_TITULO'
+      Precision = 18
+      Size = 2
+    end
+    object StringField34: TStringField
+      FieldName = 'LICPFCNPJPAGADOR'
+      Size = 15
+    end
+    object StringField35: TStringField
+      FieldName = 'LINOME_PAGADOR'
+      Size = 40
+    end
+    object StringField36: TStringField
+      FieldName = 'ENDERECOPAGADOR'
+      Size = 40
+    end
+    object StringField37: TStringField
+      FieldName = 'BAIRROPAGADOR'
+    end
+    object StringField38: TStringField
+      FieldName = 'CEPPAGADOR'
+      Size = 9
+    end
+    object StringField39: TStringField
+      FieldName = 'MUNICIPIOPAGADOR'
+      Size = 40
+    end
+    object StringField40: TStringField
+      FieldName = 'UFPAGADOR'
+      Size = 2
+    end
+    object StringField41: TStringField
+      FieldName = 'LICPFCNPJBENEFICIARIO'
+      Size = 15
+    end
+    object StringField42: TStringField
+      FieldName = 'LINOME_BENEFICIARIO'
+      Size = 40
+    end
+    object StringField43: TStringField
+      FieldName = 'LOGRADOUROBENEFICIARIO'
+      Size = 40
+    end
+    object StringField44: TStringField
+      FieldName = 'BAIRROBENEFICIARIO'
+    end
+    object StringField45: TStringField
+      FieldName = 'CEPBENEFICIARIO'
+      Size = 9
+    end
+    object StringField46: TStringField
+      FieldName = 'MUNICIPIOBENEFICIARIO'
+      Size = 50
+    end
+    object StringField47: TStringField
+      FieldName = 'UFBENEFICIARIO'
+      Size = 2
+    end
+    object StringField48: TStringField
+      FieldName = 'LIAGENCIA_BENEFICIARIO'
+      Size = 6
+    end
+    object StringField49: TStringField
+      FieldName = 'LICONTA_BENEFICIARIO'
+      Size = 9
+    end
+    object StringField50: TStringField
+      FieldName = 'LINUMERO_DOCUMENTO'
+      Size = 15
+    end
+    object StringField51: TStringField
+      FieldName = 'LINOSSO_NUMERO'
+      Size = 15
+    end
+    object StringField52: TStringField
+      FieldName = 'LICOD_BARRAS'
+      Size = 112
+    end
+    object StringField53: TStringField
+      FieldName = 'LILINHA_DIGITAVEL'
+      Size = 54
+    end
+    object StringField54: TStringField
+      FieldName = 'LICPFCNPJAVALISTA'
+      Size = 15
+    end
+    object StringField55: TStringField
+      FieldName = 'LINOME_AVALISTA'
+      Size = 40
+    end
+    object StringField56: TStringField
+      FieldName = 'ENDERECOAVALISTA'
+      Size = 40
+    end
+    object StringField57: TStringField
+      FieldName = 'CEPAVALISTA'
+      Size = 9
+    end
+    object StringField58: TStringField
+      FieldName = 'MUNICIPIOAVALISTA'
+      Size = 40
+    end
+    object StringField59: TStringField
+      FieldName = 'UFAVALISTA'
+      Size = 2
+    end
+    object DateField6: TDateField
+      FieldName = 'LIDATA_EMISSAO'
+    end
+    object StringField60: TStringField
+      FieldName = 'LICARTEIRA'
+      Size = 3
+    end
+    object IntegerField13: TIntegerField
+      FieldName = 'LIQUANTIDADE'
+    end
+    object StringField61: TStringField
+      FieldName = 'LIACEITE'
+      Size = 1
+    end
+    object BlobField4: TBlobField
+      FieldName = 'LIINSTRUCOES'
+      Size = 1
+    end
+    object BlobField5: TBlobField
+      FieldName = 'LIARQUIVO_ENVIO'
+      Required = True
+      Size = 1
+    end
+    object BlobField6: TBlobField
+      FieldName = 'LIARQUIVO_REBIMENTO'
+      Required = True
+      Size = 1
+    end
+    object StringField62: TStringField
+      FieldName = 'LISTATUS_TITULO'
+      Size = 2
+    end
+    object IntegerField14: TIntegerField
+      FieldName = 'LICODG_TURMA'
+    end
+  end
+  object dspConsultaLogIntegracao: TDataSetProvider
+    DataSet = QryConsultaLogIntegracao
+    Left = 264
+    Top = 310
+  end
+end

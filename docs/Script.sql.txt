@@ -1,0 +1,185 @@
+
+
+/*GENERATOR*/
+create generator GEN_DISTRIBUIDOR_ID;
+create generator GEN_NEGOCIACAO_COD;
+create generator GEN_NEGOCIACAO_ID;
+create generator GEN_NEGOCIACAO_ITEM_ID;
+create generator GEN_PRODUTO_ID;
+create generator GEN_PRODUTO_COD;
+create generator GEN_PRODUTOR_CREDITO_ID;
+create generator GEN_PRODUTOR_ID;
+
+
+/*PRODUTOR*/
+create table PRODUTOR (
+PRODUTOR_ID          INTEGER                        not null,
+CPF_CNPJ             VARCHAR(14)                    not null,
+NOME                 VARCHAR(100)                   not null,
+constraint PK_PRODUTOR primary key (PRODUTOR_ID)
+);
+
+CREATE TRIGGER TG_PRODUTOR for PRODUTOR
+BEFORE INSERT position 0
+AS
+BEGIN
+	new.PRODUTOR_ID = gen_id("GEN_PRODUTOR_ID", 1);
+END;
+
+INSERT INTO produtor(CPF_CNPJ, NOME) VALUES ('05745582000159', 'ANTONIO SIMEAO' )
+INSERT INTO produtor(CPF_CNPJ, NOME) VALUES ('54391128000152', 'MARCOS ANDRADE' )
+INSERT INTO produtor(CPF_CNPJ, NOME) VALUES ('49478815000170', 'JOAO TRAMOTINA' )
+INSERT INTO produtor(CPF_CNPJ, NOME) VALUES ('69146156000181', 'GILBERTO MARTINS' )
+
+
+
+/*DISTRIBUIDOR*/
+create table DISTRIBUIDOR (
+DISTRIBUIDOR_ID      INTEGER                        not null,
+CNPJ                 VARCHAR(16)                    not null,
+NOME                 VARCHAR(100)                   not null,
+constraint PK_DISTRIBUIDOR primary key (DISTRIBUIDOR_ID)
+);
+
+CREATE TRIGGER TG_DISTRIBUIDOR for DISTRIBUIDOR
+BEFORE INSERT position 0
+AS
+BEGIN
+	new.DISTRIBUIDOR_ID = gen_id("GEN_DISTRIBUIDOR_ID", 1);
+END;
+
+INSERT INTO distribuidor(CNPJ, NOME) VALUES ('34214992000171', 'AGRORURAL GOIAS' );
+INSERT INTO distribuidor(CNPJ, NOME) VALUES ('08285905000167', 'AGRORURAL MATO GROSSO' );
+INSERT INTO distribuidor(CNPJ, NOME) VALUES ('03867013000150', 'AGRORURAL SAO PAULO' );
+INSERT INTO distribuidor(CNPJ, NOME) VALUES ('93716236000100', 'AGROCRIA' );
+
+
+
+/*PRODUTO*/
+create table PRODUTO (
+PRODUTO_ID           INTEGER                        not null,
+CODIGO               INTEGER                        not null,
+NOME                 VARCHAR(100)                   not null,
+VLR_PRECO_VENDA      NUMERIC(10,2)                  not null,
+constraint PK_PRODUTO primary key (PRODUTO_ID)
+);
+
+
+CREATE TRIGGER TG_PRODUTO_ID for PRODUTO
+BEFORE INSERT position 0
+AS
+BEGIN
+new.PRODUTO_ID = gen_id("GEN_PRODUTO_ID", 1);
+END;
+
+
+CREATE TRIGGER TG_PRODUTO_COD for PRODUTO
+BEFORE INSERT position 0
+AS
+BEGIN
+	new.CODIGO = gen_id("GEN_PRODUTO_COD", 1);
+END;
+
+INSERT INTO produto (NOME, VLR_PRECO_VENDA) VALUES ('FERTILIZANTE AGROMAIS 1 - 50KG ', '250.00' );
+INSERT INTO produto (NOME, VLR_PRECO_VENDA) VALUES ('FERTILIZANTE AGROMAIS 2 - 50KG ', '280.00' );
+INSERT INTO produto (NOME, VLR_PRECO_VENDA) VALUES ('FERTILIZANTE AGROMAIS 3 - 50KG ', '320.00' );
+INSERT INTO produto (NOME, VLR_PRECO_VENDA) VALUES ('FERTILIZANTE NATUBRASIL - 50KG ', '300.00' );
+INSERT INTO produto (NOME, VLR_PRECO_VENDA) VALUES ('FERTILIZANTE NATUBRASIL PLUS - 50KG ', '400.00' );
+
+
+
+/*NEGOCIACAO*/
+create table NEGOCIACAO (
+NEGOCIACAO_ID        INTEGER                        not null,
+CODIGO               INTEGER                        not null,
+DISTRIBUIDOR_ID      INTEGER                        not null,
+PRODUTOR_ID          INTEGER                        not null,
+VLR_TOTAL            NUMERIC(10,2)                  not null,
+DATA_CADASTRO        DATE                           not null,
+DATA_APROVACAO       DATE,
+DATA_CANCELAMENTO    DATE,
+DATA_CONCLUSAO       DATE                           not null,
+STATUS               INTEGER                        not null,
+constraint PK_NEGOCIACAO primary key (NEGOCIACAO_ID)
+);
+
+alter table NEGOCIACAO
+   add constraint FK_NEGOCIACAO_DISTRIBUIDOR foreign key (DISTRIBUIDOR_ID)
+      references DISTRIBUIDOR (DISTRIBUIDOR_ID);
+
+alter table NEGOCIACAO
+   add constraint FK_NEGOCIACAO_PRODUTOR foreign key (PRODUTOR_ID)
+      references PRODUTOR (PRODUTOR_ID);
+
+
+CREATE TRIGGER TG_NEGOCIACAO_ID for NEGOCIACAO
+BEFORE INSERT position 0
+AS
+BEGIN
+new.NEGOCIACAO_ID = gen_id("GEN_NEGOCIACAO_ID", 1);
+END;
+
+
+CREATE TRIGGER TG_NEGOCIACAO_COD for NEGOCIACAO
+BEFORE INSERT position 0
+AS
+BEGIN
+new.CODIGO = gen_id("GEN_NEGOCIACAO_COD", 1);
+END;
+
+
+
+/*NEGOCIACAO_ITENS*/
+create table NEGOCIACAO_ITENS (
+NEGOCIACAO_ITEM_ID   INTEGER                        not null,
+NEGOCIACAO_ID        INTEGER,
+PRODUTO_ID           INTEGER,
+constraint PK_NEGOCIACAO_ITENS primary key (NEGOCIACAO_ITEM_ID)
+);
+
+alter table NEGOCIACAO_ITENS
+   add constraint FK_NEGOCIACAO_ITENS_PRODUTO foreign key (PRODUTO_ID)
+      references PRODUTO (PRODUTO_ID);
+
+alter table NEGOCIACAO_ITENS
+   add constraint FK_NEGOCIACAO_ITES_NEGOCIACAO foreign key (NEGOCIACAO_ID)
+      references NEGOCIACAO (NEGOCIACAO_ID);
+
+
+CREATE TRIGGER TG_NEGOCIACAO_ITENS for NEGOCIACAO_ITENS
+BEFORE INSERT position 0
+AS
+BEGIN
+	new.NEGOCIACAO_ITEM_ID = gen_id("GEN_NEGOCIACAO_ITEM_ID", 1);
+END;
+	  
+	  
+	  
+	  
+/*PRODUTOR_CREDITO*/	  
+create table PRODUTOR_CREDITO (
+PRODUTOR_CREDITO_ID  INTEGER                        not null,
+PRODUTOR_ID          INTEGER                        not null,
+DISTRIBUIDOR_ID      INTEGER                        not null,
+VLR_CREDITO          NUMERIC(10,2)                  not null,
+constraint PK_PRODUTOR_CREDITO primary key (PRODUTOR_CREDITO_ID)
+);
+
+alter table PRODUTOR_CREDITO
+   add constraint FK_PRODUTOR_CREDITO_DISTRI foreign key (DISTRIBUIDOR_ID)
+      references DISTRIBUIDOR (DISTRIBUIDOR_ID);
+
+alter table PRODUTOR_CREDITO
+   add constraint FK_PRODUTOR_CREDITO_PRODUTOR foreign key (PRODUTOR_ID)
+      references PRODUTOR (PRODUTOR_ID);
+
+
+CREATE TRIGGER TG_PRODUTOR_CREDITO for PRODUTOR_CREDITO
+BEFORE INSERT position 0
+AS
+BEGIN
+	new.PRODUTOR_CREDITO_ID = gen_id("GEN_PRODUTOR_CREDITO_ID", 1);
+END;
+
+
+ozael teste

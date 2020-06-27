@@ -1,0 +1,9 @@
+inherited frmDistribuidor: TfrmDistribuidor
+  Caption = 'frmDistribuidor'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited QryPrincipal: TSQLQuery
+    SQL.Strings = (
+      'SELECT * FROM distribuidor')
+  end
+end

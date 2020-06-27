@@ -1,0 +1,156 @@
+unit uDistribuidor;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrwCadastro, Data.DB, Data.FMTBcd,
+  Data.SqlExpr, Datasnap.Provider, Datasnap.DBClient, System.Actions,
+  Vcl.ActnList, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids,
+  Vcl.ComCtrls, Vcl.Mask, Vcl.DBCtrls;
+
+type
+  TfrmDistribuidor = class(TfrwCadastro)
+    cdsPrincipalDISTRIBUIDOR_ID: TIntegerField;
+    cdsPrincipalCNPJ: TStringField;
+    cdsPrincipalNOME: TStringField;
+    QryPrincipalDISTRIBUIDOR_ID: TIntegerField;
+    QryPrincipalCNPJ: TStringField;
+    QryPrincipalNOME: TStringField;
+    lbl_cnpj: TLabel;
+    lbl_Nome: TLabel;
+    edt_Nome: TDBEdit;
+    edt_Cnpj: TDBEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure act_pesquisarExecute(Sender: TObject);
+    procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function VerificarCampos(iIndice : Integer) : Boolean; override;
+    procedure Cfg_Hints; override;
+    procedure setCamposObrigatorios; override;
+    procedure setTituloCampos; override;
+
+  end;
+
+var
+  frmDistribuidor: TfrmDistribuidor;
+
+implementation
+
+{$R *.dfm}
+
+uses uMensagem, uBiblioteca;
+
+{ TfrmDistribuidor }
+
+procedure TfrmDistribuidor.act_pesquisarExecute(Sender: TObject);
+begin
+  { Pesquisar Registro }
+
+  try
+    if not CampoNulo then
+    begin
+      Screen.Cursor := crHourGlass;
+      QryPrincipal.SQL.Text := Self.fSqlPrincipal;
+
+      lFiltro := EmptyStr;
+      lFiltro := Self.fSqlPrincipal;
+
+      if not (edt_PesqCodigo.Text = EmptyStr) then
+         lFiltro := AddFiltro_Aux(lFiltro, ' CNPJ = ' + edt_PesqCodigo.Text );
+
+      if not (edt_PesqDescricao.Text = EmptyStr) then
+         lFiltro := AddFiltro_Aux(lFiltro, ' NOME LIKE ' + QuotedStr(Trim('%' + edt_PesqDescricao.Text + '%' )));
+
+      QryPrincipal.SQL.Clear;
+      QryPrincipal.SQL.Add( lFiltro + OrderBy );
+
+      CdsPrincipal.Refresh;
+      cdsPrincipal.First;
+
+      Cfg_Button;
+
+    end;
+  finally
+     Screen.Cursor := crDefault;
+     CdsPrincipal.Open;
+  end;
+
+
+end;
+
+procedure TfrmDistribuidor.cdsPrincipalAfterInsert(DataSet: TDataSet);
+begin
+  inherited;
+  cdsPrincipalDISTRIBUIDOR_ID.Value := 9999;
+end;
+
+procedure TfrmDistribuidor.Cfg_Hints;
+begin
+  inherited;
+
+  edt_Cnpj.Hint := 'CNPJ';
+  edt_NOME.Hint := 'Nome';
+
+end;
+
+procedure TfrmDistribuidor.FormCreate(Sender: TObject);
+begin
+
+  TituloFormulario := 'Distribuidor';
+  OrderBy := ' NOME';
+
+  inherited;
+
+end;
+
+procedure TfrmDistribuidor.setCamposObrigatorios;
+begin
+
+  cdsPrincipalCNPJ.Required := true;
+  lbl_cnpj.Caption          := lbl_cnpj.Caption + '*';
+
+  cdsPrincipalNOME.Required := true;
+  lbl_Nome.Caption          := lbl_Nome.Caption + '*';
+
+end;
+
+procedure TfrmDistribuidor.setTituloCampos;
+begin
+
+  cdsPrincipalCNPJ.DisplayLabel := 'CPF / CNPJ';
+  cdsPrincipalNOME.DisplayLabel := 'Nome';
+
+end;
+
+function TfrmDistribuidor.VerificarCampos(iIndice: Integer): Boolean;
+var
+  bAchou : Boolean;
+begin
+  inherited;
+
+  bAchou := True;
+
+  if ((iIndice = 1) or (iIndice = 999)) and (edt_Cnpj.Text = EmptyStr) then
+  begin
+    SysMensagem('Campo CNPJ é obrigatório!', dsAviso);
+
+    bAchou := False;
+    edt_Cnpj.SetFocus;
+  end else
+  if ((iIndice = 2) or (iIndice = 999)) and (edt_Nome.Text = EmptyStr) then
+  begin
+    SysMensagem('Valor Nome é obrigatório!', dsAviso);
+
+    bAchou := False;
+    edt_Nome.SetFocus;
+  end;
+
+  Result := bAchou;
+
+end;
+
+end.

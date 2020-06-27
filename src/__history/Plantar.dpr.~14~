@@ -1,0 +1,49 @@
+program Plantar;
+
+uses
+  Vcl.Forms,
+  Windows,
+  Dialogs,
+  SysUtils,
+  Controls,
+  uBiblioteca in 'uBiblioteca.pas',
+  uConstante in 'uConstante.pas',
+  udmPrincipal in 'udmPrincipal.pas' {dmPrincipal: TDataModule},
+  ufrmSplash in 'ufrmSplash.pas' {frmSplash},
+  uMensagem in 'uMensagem.pas',
+  Unit1 in 'Unit1.pas' {Form1},
+  untPrincipal in 'untPrincipal.pas' {frmPrincipal},
+  uVariaveisGlobais in 'uVariaveisGlobais.pas',
+  ufrmSobre in 'ufrmSobre.pas' {frmSobre},
+  ufrwPesquisa in 'Framework\ufrwPesquisa.pas' {frwPesquisa},
+  ufrwPai in 'Framework\ufrwPai.pas' {frwPai},
+  ufrwCadastro in 'Framework\ufrwCadastro.pas' {frwCadastro},
+  uProduto in 'uProduto.pas' {frmProduto},
+  uProdutor in 'uProdutor.pas' {frwCadastro2};
+
+{$R *.res}
+
+var
+  MyHandle : HWND;
+begin
+  Application.Initialize;
+  MyHandle := FindWindow (nil, SysVarNome_Sistema);
+  if (MyHandle > 0) then
+  begin
+    SysMensagem('Aplicação já encontra-se em execução!', dsInformacao);
+    Application.Terminate;
+  end
+  else begin
+    FrmSplash:= TFrmSplash.create(application);
+    Application.CreateForm(TdmPrincipal, dmPrincipal);
+  Application.CreateForm(TfrwCadastro2, frwCadastro2);
+  Application.Title := SysVarNome_Sistema;
+    FrmSplash.show;
+    FrmSplash.update;
+    //Sleep(4000);
+    FrmSplash.hide;
+    FrmSplash.free;
+    Application.CreateForm(TfrmPrincipal, frmPrincipal);
+    Application.Run;
+  end;
+end.

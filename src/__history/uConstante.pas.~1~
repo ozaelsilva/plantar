@@ -1,0 +1,71 @@
+{///////////////////////////////////////////////////////////////////////////////
+/Autor: Ozael da Silva Melo                                                    /
+/Data: 18/12/2019                                                              /
+/Nome: uConstante                                                              /
+/Descrição: Unit com variaveis e constantes usadas no sistema                  /
+/                                                                              /
+/ +Alterações                                                                  /
+/    18/12/2019 - Inserindo Cabeçario - Ozael Silva                            /                                                                              /
+/                                                                              /
+///////////////////////////////////////////////////////////////////////////////}
+
+unit uConstante;
+
+interface
+
+uses
+  Classes;
+
+const
+  SysVarNome_SoftHouse        = '2020 - EducarCob - Integração Cobrança Bradesco';
+
+  SysVarNome_Sistema          = 'EducarCob 2020';
+  SysVarNome_SistemaDetalhado = 'EducarCob 2020 - Integração Cobrança Bradesco';
+  SysVarNome_SistemaComercial = 'EducarCob 2020 ®';
+
+  SysVarWeb_Page              = 'www.educar.com.br';
+  SysVarWeb_PageProduto       = 'www.educar.com.br/help';
+  SysVarE_mail_Suporte        = 'suporte@educar.com.br';
+  SysVarTelefone_Contato      = '+55 (62)98115-7735';
+
+  SysVarArquivo_de_Idioma     = '\Arquivos\Portugues.idi';
+  SysVarPasta_de_Arquivos     = '\';
+
+  SysVarArquivo_de_Ajuda      = 'Educar2020.Chm';
+  SysVarPasta_de_Ajuda        = '\Ajuda\';
+
+  SysVarftpHost               = '';
+  SysVarftpPassword           = '';
+  SysVarftpUsername           = '';
+  SysVarftpPassive            = False;
+
+var
+  Software_house : record
+  Nome_Sistema: String;
+  Nome_SistemaDetalhado: String;
+  Telefone : String;
+  WebSite : String;
+  Email : String;
+  Versao : String;
+end;
+
+var
+  Sistema : record
+    SysVarBanco_de_dados: String;
+    SysVarNomeFantasia_Empresa: String;
+    SysVarNomeRazaoSocial_Empresa: String;
+    SysVarCnpj_Empresa: String;
+    SysVarTelefone_Empresa: String;
+    SysVarEmpresa_id: integer;
+    SysVarNome_Usuario: String;
+    SysVarCod_Serial : String;
+    SysVarUsuario_id: integer;
+    SysVarDta_Atual: TDateTime;
+    SysVarForm_Atual : String;
+    SysVarUsuarios_Longados : integer;
+    SysDirBoleto : String;
+  end;
+
+implementation
+
+end.

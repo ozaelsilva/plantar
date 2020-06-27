@@ -1,0 +1,5 @@
+inherited frmPesqGeral: TfrmPesqGeral
+  Caption = 'frmPesqGeral'
+  PixelsPerInch = 96
+  TextHeight = 13
+end
