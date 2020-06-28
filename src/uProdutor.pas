@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrwCadastro, Data.DB, Data.FMTBcd,
   Data.SqlExpr, Datasnap.Provider, Datasnap.DBClient, System.Actions,
   Vcl.ActnList, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls, Vcl.Mask, Vcl.DBCtrls;
+  Vcl.ComCtrls, Vcl.Mask, Vcl.DBCtrls, frxClass, frxDBSet;
 
 type
   TPesquisa = (pDistribuidor);
@@ -59,6 +59,8 @@ type
     cdsLimiteDistribuidornome_distribuidor: TStringField;
     lbl_VlrCredito: TLabel;
     edt_VlrCredito: TDBEdit;
+    frxReport1: TfrxReport;
+    frxDBDataset1: TfrxDBDataset;
     procedure FormCreate(Sender: TObject);
     procedure act_pesquisarExecute(Sender: TObject);
     procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
@@ -82,6 +84,7 @@ type
     procedure dspPrincipalAfterUpdateRecord(Sender: TObject; SourceDS: TDataSet;
       DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind);
     procedure cdsPrincipalBeforeDelete(DataSet: TDataSet);
+    procedure act_ImprimirExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -134,6 +137,13 @@ begin
   inherited;
 
   cfg_Botoes_Itens;
+end;
+
+procedure TfrmProdutor.act_ImprimirExecute(Sender: TObject);
+begin
+  inherited;
+
+  frxReport1.ShowReport();
 end;
 
 procedure TfrmProdutor.act_IncluirExecute(Sender: TObject);
@@ -315,8 +325,11 @@ begin
 
   if ((UpdateKind = ukInsert) and (SourceDS.Name = QryLimiteDistribuidor.Name)) then
   begin
-    DeltaDS.FieldByName('PRODUTOR_ID').ReadOnly := False;
-    DeltaDS.FieldByName('PRODUTOR_ID').NewValue := ID_Mestre;
+    if not(ID_Mestre = 0) then
+    begin
+      DeltaDS.FieldByName('PRODUTOR_ID').ReadOnly := False;
+      DeltaDS.FieldByName('PRODUTOR_ID').NewValue := ID_Mestre;
+    end;
   end;
 
 end;
