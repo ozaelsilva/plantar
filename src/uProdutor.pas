@@ -61,6 +61,10 @@ type
     edt_VlrCredito: TDBEdit;
     frxReport1: TfrxReport;
     frxDBDataset1: TfrxDBDataset;
+    QryPrincipalTIPO_PESSOA: TStringField;
+    cdsPrincipalTIPO_PESSOA: TStringField;
+    lbl_TipoPessoa: TLabel;
+    cbox_TipoPessoa: TDBComboBox;
     procedure FormCreate(Sender: TObject);
     procedure act_pesquisarExecute(Sender: TObject);
     procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
@@ -85,6 +89,9 @@ type
       DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind);
     procedure cdsPrincipalBeforeDelete(DataSet: TDataSet);
     procedure act_ImprimirExecute(Sender: TObject);
+    procedure cdsPrincipalTIPO_PESSOAChange(Sender: TField);
+    procedure cdsPrincipalCPF_CNPJGetText(Sender: TField; var Text: string;
+      DisplayText: Boolean);
 
   private
     { Private declarations }
@@ -124,26 +131,40 @@ end;
 
 procedure TfrmProdutor.act_CancelarExecute(Sender: TObject);
 begin
-  if bRegistroDetalheAlterado then
-    cdsLimiteDistribuidor.Cancel;
+  if (cdsLimiteDistribuidor.State in [dsInsert, dsEdit]) then
+    SysMensagem('É necessário concluir o item para cancelar o produtor!', dsAviso)
+  else begin
 
-  inherited;
+//  if bRegistroDetalheAlterado then
+//    cdsLimiteDistribuidor.Cancel;
 
-  cfg_Botoes_Itens;
+    inherited;
+
+    pgLimiteCredito.ActivePage := tbBrowserItens;
+    cfg_Botoes_Itens;
+  end;
 end;
 
 procedure TfrmProdutor.act_GravarExecute(Sender: TObject);
 begin
-  inherited;
 
-  cfg_Botoes_Itens;
+  if (cdsLimiteDistribuidor.State in [dsInsert, dsEdit]) then
+    SysMensagem('É necessário concluir o item para salvar o produtor!', dsAviso)
+  else begin
+    inherited;
+
+    pgLimiteCredito.ActivePage := tbBrowserItens;
+    cfg_Botoes_Itens;
+  end;
+
 end;
 
 procedure TfrmProdutor.act_ImprimirExecute(Sender: TObject);
 begin
-  inherited;
 
   frxReport1.ShowReport();
+  cdsPrincipal.First;
+
 end;
 
 procedure TfrmProdutor.act_IncluirExecute(Sender: TObject);
@@ -299,12 +320,43 @@ begin
 
 end;
 
+procedure TfrmProdutor.cdsPrincipalCPF_CNPJGetText(Sender: TField;
+  var Text: string; DisplayText: Boolean);
+begin
+
+  if  Sender.AsString <> '' then
+  begin
+    if cdsPrincipalTIPO_PESSOA.Value = 'Física' then
+      Text := FormatFloat( '0##"."###"."###"-"##', StrToFloatDef(Sender.AsString, 0) )
+    else
+      Text := FormatFloat( '0#"."###"."###"/"####"-"##', StrToFloatDef(Sender.AsString, 0) );
+  end;
+
+  inherited;
+
+
+end;
+
+procedure TfrmProdutor.cdsPrincipalTIPO_PESSOAChange(Sender: TField);
+begin
+  inherited;
+
+  if cbox_TipoPessoa.ItemIndex = 0 then
+    cdsPrincipalCPF_CNPJ.EditMask := '999.999.999-99;0;_'
+  else
+    cdsPrincipalCPF_CNPJ.EditMask := '99.999.999/9999-99;0;_';
+
+end;
+
 procedure TfrmProdutor.Cfg_Hints;
 begin
 
-  edt_CpfCnpj.Hint := 'CPF / CNPJ';
-  edt_NOME.Hint    := 'Nome';
+  cbox_TipoPessoa.Hint := 'Tipo Pessoa';
+  edt_CpfCnpj.Hint     := 'CPF / CNPJ';
+  edt_NOME.Hint        := 'Nome';
 
+  edt_CodDistribuidor.Hint := 'Código Distribuidor';
+  edt_VlrCredito.Hint      := 'Vlr. Crédito';
 end;
 
 procedure TfrmProdutor.dspPrincipalAfterUpdateRecord(Sender: TObject;
@@ -464,19 +516,33 @@ end;
 procedure TfrmProdutor.setCamposObrigatorios;
 begin
 
-  cdsPrincipalCPF_CNPJ.Required := true;
-  lbl_cpfcnpj.Caption           := lbl_cpfcnpj.Caption + '*';
+  cdsPrincipalTIPO_PESSOA.Required := true;
+  lbl_TipoPessoa.Caption           := lbl_TipoPessoa.Caption + '*';
 
-  cdsPrincipalNOME.Required     := true;
-  lbl_Nome.Caption              := lbl_Nome.Caption + '*';
+  cdsPrincipalCPF_CNPJ.Required    := true;
+  lbl_cpfcnpj.Caption              := lbl_cpfcnpj.Caption + '*';
+
+  cdsPrincipalNOME.Required        := true;
+  lbl_Nome.Caption                 := lbl_Nome.Caption + '*';
+
+
+  cdsLimiteDistribuidorcod_distribuidor.Required := true;
+  lbl_CodDistribuidor.Caption                    := lbl_CodDistribuidor.Caption + '*';
+
+  cdsLimiteDistribuidorVLR_CREDITO.Required      := true;
+  lbl_VlrCredito.Caption                         := lbl_VlrCredito.Caption + '*';
 
 end;
 
 procedure TfrmProdutor.setTituloCampos;
 begin
 
-  cdsPrincipalCPF_CNPJ.DisplayLabel := 'CPF / CNPJ';
-  cdsPrincipalNOME.DisplayLabel     := 'Nome';
+  cdsPrincipalTIPO_PESSOA.DisplayLabel               := 'Tipo Pessoa';
+  cdsPrincipalCPF_CNPJ.DisplayLabel                  := 'CPF / CNPJ';
+  cdsPrincipalNOME.DisplayLabel                      := 'Nome';
+
+  cdsLimiteDistribuidorcod_distribuidor.DisplayLabel := 'Código Distribuidor';
+  cdsLimiteDistribuidorVLR_CREDITO.DisplayLabel      := 'Vlr. Crédito';
 
 end;
 
@@ -541,14 +607,21 @@ begin
 
   bAchou := True;
 
-  if ((iIndice = 1) or (iIndice = 999)) and (edt_CpfCnpj.Text = EmptyStr) then
+  if ((iIndice = 1) or (iIndice = 999)) and (cbox_TipoPessoa.ItemIndex = -1) then
+  begin
+    SysMensagem('Campo Tipo Pessoa é obrigatório!', dsAviso);
+
+    bAchou := False;
+    cbox_TipoPessoa.SetFocus;
+  end else
+  if ((iIndice = 2) or (iIndice = 999)) and (Trim(edt_CpfCnpj.Text) = EmptyStr) then
   begin
     SysMensagem('Campo CPF / CNPJ é obrigatório!', dsAviso);
 
     bAchou := False;
     edt_CpfCnpj.SetFocus;
   end else
-  if ((iIndice = 2) or (iIndice = 999)) and (edt_Nome.Text = EmptyStr) then
+  if ((iIndice = 3) or (iIndice = 999)) and (edt_Nome.Text = EmptyStr) then
   begin
     SysMensagem('Valor Nome é obrigatório!', dsAviso);
 

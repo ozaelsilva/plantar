@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrwCadastro, Data.DB, Data.FMTBcd,
   Data.SqlExpr, Datasnap.Provider, Datasnap.DBClient, System.Actions,
   Vcl.ActnList, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls, Vcl.Mask, Vcl.DBCtrls;
+  Vcl.ComCtrls, Vcl.Mask, Vcl.DBCtrls, frxClass, frxDBSet;
 
 type
   TfrmDistribuidor = class(TfrwCadastro)
@@ -21,9 +21,12 @@ type
     lbl_Nome: TLabel;
     edt_Nome: TDBEdit;
     edt_Cnpj: TDBEdit;
+    frxReport1: TfrxReport;
+    frxDBDataset1: TfrxDBDataset;
     procedure FormCreate(Sender: TObject);
     procedure act_pesquisarExecute(Sender: TObject);
     procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
+    procedure act_ImprimirExecute(Sender: TObject);
   private
     { Private declarations }
   public
@@ -45,6 +48,14 @@ implementation
 uses uMensagem, uBiblioteca;
 
 { TfrmDistribuidor }
+
+procedure TfrmDistribuidor.act_ImprimirExecute(Sender: TObject);
+begin
+
+  frxReport1.ShowReport();
+  cdsPrincipal.First;
+
+end;
 
 procedure TfrmDistribuidor.act_pesquisarExecute(Sender: TObject);
 begin

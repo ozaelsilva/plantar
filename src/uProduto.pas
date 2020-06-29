@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrwCadastro, Data.DB, Data.Win.ADODB,
   Datasnap.Provider, Datasnap.DBClient, System.Actions, Vcl.ActnList,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls,
-  Data.FMTBcd, Data.SqlExpr, Vcl.Mask, Vcl.DBCtrls;
+  Data.FMTBcd, Data.SqlExpr, Vcl.Mask, Vcl.DBCtrls, frxClass, frxDBSet;
 
 type
   TfrmProduto = class(TfrwCadastro)
@@ -25,9 +25,12 @@ type
     edt_Nome: TDBEdit;
     edt_vlr_venda: TDBEdit;
     edt_Codigo: TDBEdit;
+    frxReport1: TfrxReport;
+    frxDBDataset1: TfrxDBDataset;
     procedure FormCreate(Sender: TObject);
     procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
     procedure act_pesquisarExecute(Sender: TObject);
+    procedure act_ImprimirExecute(Sender: TObject);
   private
     { Private declarations }
   public
@@ -47,6 +50,14 @@ implementation
 {$R *.dfm}
 
 uses uMensagem, uBiblioteca;
+
+procedure TfrmProduto.act_ImprimirExecute(Sender: TObject);
+begin
+
+  frxReport1.ShowReport();
+  cdsPrincipal.First;
+
+end;
 
 procedure TfrmProduto.act_pesquisarExecute(Sender: TObject);
 begin

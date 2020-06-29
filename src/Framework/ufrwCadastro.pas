@@ -388,27 +388,26 @@ begin
 end;
 
 procedure TfrwCadastro.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+var
+  sText : String;
 begin
-  if FTipoForm = dAlterar then
+  if (cdsPrincipal.State in [dsInsert, dsEdit]) then
   begin
-    if (SysMensagem('Deseja cancelar a Alteração?', dsConfirmacao)) then
+    if cdsPrincipal.State = dsEdit then
+      sText := 'Deseja cancelar a Alteração?'
+    else
+    if cdsPrincipal.State = dsInsert then
+      sText := 'Deseja cancelar a Inserção?';
+
+    if SysMensagem(sText, dsConfirmacao) then
     begin
       CdsPrincipal.Cancel;
+      pgPrincipal.ActivePage := tbBrowser;
+
       CanClose := True;
-    end
-    else
+    end else
       CanClose := False;
 
-  end else
-  if FTipoForm = dInserir then
-  begin
-    if (SysMensagem('Deseja cancelar a Inserção?', dsConfirmacao)) then
-    begin
-      CdsPrincipal.Cancel;
-      CanClose := True;
-    end
-    else
-      CanClose := False;
   end;
 end;
 

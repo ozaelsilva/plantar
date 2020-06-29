@@ -2711,7 +2711,7 @@ Coment\&#39;e1rios: \par
 <a:Code>Cadastrar_negociacao</a:Code>
 <a:CreationDate>1592957101</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593031518</a:ModificationDate>
+<a:ModificationDate>1593372294</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fcharset0 Calibri;}{\f3\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f4\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
@@ -2760,6 +2760,15 @@ Coment\&#39;e1rios: \par
 \pard\par
   - * data_cadastro\par
 \pard\qj      Data de cadastro da negocia\&#39;e7\&#39;e3o no sistema\par
+\par
+\pard   - data_aprovacao\par
+\pard\qj      Data de aprovacao da negocia\&#39;e7\&#39;e3o no sistema caso seja aprovada\par
+\pard\par
+  - data_cancelamento\par
+\pard\qj      Data de cancelamento da negocia\&#39;e7\&#39;e3o caso seja cancelada\par
+\pard\par
+  - data_conclusao\par
+\pard\qj      Data de conclus\&#39;e3o da negocia\&#39;e7\&#39;e3o\par
 \pard\par
   - * status\par
      Status da negocia\&#39;e7\&#39;e3o ( 1- \cf1\f2\fs18\ldblquote Pendente\rdblquote , 2 - \ldblquote Aprovada\rdblquote ,  3 - \ldblquote Concluir\rdblquote , 4- \ldblquote Cancelada\rdblquote ) \par
@@ -2847,7 +2856,7 @@ Coment\&#39;e1rios: \par
 <a:Code>Cadastrar_Produtor</a:Code>
 <a:CreationDate>1592957103</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593025406</a:ModificationDate>
+<a:ModificationDate>1593372129</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
@@ -2881,6 +2890,9 @@ Coment\&#39;e1rios: \par
 \cf0\b0   - * produtor_id\par
     Identificador do produtor\par
 \par
+  - * tipo_pessoa\par
+\pard\qj     Qual o tipo da pessoa f\&#39;edsica e jur\&#39;eddica\par
+\pard\par
   - * cpf_cnpj\par
 \pard\qj     C\&#39;f3digo usado pelo usu\&#39;e1rio para identificar o produtor\par
 \pard\par

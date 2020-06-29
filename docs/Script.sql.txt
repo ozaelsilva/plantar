@@ -14,6 +14,7 @@ create generator GEN_PRODUTOR_ID;
 /*PRODUTOR*/
 create table PRODUTOR (
 PRODUTOR_ID          INTEGER                        not null,
+TIPO_PESSOA          VARCHAR(10)                    not null,
 CPF_CNPJ             VARCHAR(14)                    not null,
 NOME                 VARCHAR(100)                   not null,
 constraint PK_PRODUTOR primary key (PRODUTOR_ID)
@@ -98,8 +99,8 @@ VLR_TOTAL            NUMERIC(10,2)                  not null,
 DATA_CADASTRO        DATE                           not null,
 DATA_APROVACAO       DATE,
 DATA_CANCELAMENTO    DATE,
-DATA_CONCLUSAO       DATE                           not null,
-STATUS               INTEGER                        not null,
+DATA_CONCLUSAO       DATE,
+STATUS               VARCHAR(10)                    not null,
 constraint PK_NEGOCIACAO primary key (NEGOCIACAO_ID)
 );
 
@@ -180,6 +181,3 @@ AS
 BEGIN
 	new.PRODUTOR_CREDITO_ID = gen_id("GEN_PRODUTOR_CREDITO_ID", 1);
 END;
-
-
-ozael teste

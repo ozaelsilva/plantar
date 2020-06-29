@@ -7,15 +7,15 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrwCadastro, Data.DB, Data.FMTBcd,
   Data.SqlExpr, Datasnap.Provider, Datasnap.DBClient, System.Actions,
   Vcl.ActnList, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls, Vcl.Mask, Vcl.DBCtrls;
+  Vcl.ComCtrls, Vcl.Mask, Vcl.DBCtrls, frxClass, frxDBSet;
 
 type
   TPesquisa = (pProdutor, pDistribuidor, pProduto);
 
   TfrmNegociacao = class(TfrwCadastro)
     lbl_codigo: TLabel;
-    lbl_SaldoProdutor: TLabel;
-    edt_vlr_sado: TDBEdit;
+    lbl_vlr_negociado: TLabel;
+    edt_vlr_credito: TDBEdit;
     edt_Codigo: TDBEdit;
     QryPrincipalNEGOCIACAO_ID: TIntegerField;
     QryPrincipalCODIGO: TIntegerField;
@@ -26,7 +26,6 @@ type
     QryPrincipalDATA_APROVACAO: TDateField;
     QryPrincipalDATA_CANCELAMENTO: TDateField;
     QryPrincipalDATA_CONCLUSAO: TDateField;
-    QryPrincipalSTATUS: TIntegerField;
     cdsPrincipalNEGOCIACAO_ID: TIntegerField;
     cdsPrincipalCODIGO: TIntegerField;
     cdsPrincipalDISTRIBUIDOR_ID: TIntegerField;
@@ -36,7 +35,6 @@ type
     cdsPrincipalDATA_APROVACAO: TDateField;
     cdsPrincipalDATA_CANCELAMENTO: TDateField;
     cdsPrincipalDATA_CONCLUSAO: TDateField;
-    cdsPrincipalSTATUS: TIntegerField;
     gBox_Produtor: TGroupBox;
     lbl_DescProdutor: TLabel;
     lbl_CodProdutor: TLabel;
@@ -64,7 +62,7 @@ type
     cdsPrincipalnome_produtor: TStringField;
     cdsPrincipalcod_distribuidor: TStringField;
     cdsPrincipalnome_distribuidor: TStringField;
-    GroupBox1: TGroupBox;
+    gBox_Distribuidor: TGroupBox;
     lbl_DescDistribuidor: TLabel;
     lbl_CodDistribuidor: TLabel;
     spb_Distribuidor: TSpeedButton;
@@ -73,7 +71,14 @@ type
     edt_IdDistribuidor: TDBEdit;
     Label1: TLabel;
     edt_PesqNomeDistribuidor: TEdit;
-    cdsPrincipalVlrSaldoProdutor: TFloatField;
+    frxReport1: TfrxReport;
+    frxDBDataset1: TfrxDBDataset;
+    lbl_vlr_credito: TLabel;
+    edt_vlr_negociado: TDBEdit;
+    cdsPrincipalvlr_credito_distribuidor: TFloatField;
+    cdsPrincipalvlr_total_negociado: TFloatField;
+    QryPrincipalSTATUS: TStringField;
+    cdsPrincipalSTATUS: TStringField;
     procedure FormCreate(Sender: TObject);
     procedure act_pesquisarExecute(Sender: TObject);
     procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
@@ -87,6 +92,8 @@ type
     procedure spb_DistribuidorClick(Sender: TObject);
     procedure edt_CodDistribuidorEnter(Sender: TObject);
     procedure edt_CodDistribuidorExit(Sender: TObject);
+    procedure act_ImprimirExecute(Sender: TObject);
+    procedure act_limparExecute(Sender: TObject);
   private
     { Private declarations }
     sCod_Produtor, sCod_Distribuidor : String;
@@ -112,6 +119,20 @@ uses uMensagem, uBiblioteca, uPesqGeral, udmPrincipal;
 
 { TfrmNegociacao }
 
+procedure TfrmNegociacao.act_ImprimirExecute(Sender: TObject);
+begin
+
+  frxReport1.ShowReport();
+  cdsPrincipal.First;
+
+end;
+
+procedure TfrmNegociacao.act_limparExecute(Sender: TObject);
+begin
+  inherited;
+  edt_PesqNomeDistribuidor.Clear;
+end;
+
 procedure TfrmNegociacao.act_pesquisarExecute(Sender: TObject);
 begin
   { Pesquisar Registro }
@@ -129,10 +150,10 @@ begin
          lFiltro := AddFiltro_Aux(lFiltro, ' CODIGO = ' + edt_PesqCodigo.Text );
 
       if not (edt_PesqDescricao.Text = EmptyStr) then
-         lFiltro := AddFiltro_Aux(lFiltro, ' NOME_PRODUTOR LIKE ' + QuotedStr(Trim('%' + edt_PesqDescricao.Text + '%' )));
+         lFiltro := AddFiltro_Aux(lFiltro, ' PROD.NOME LIKE ' + QuotedStr(Trim('%' + edt_PesqDescricao.Text + '%' )));
 
       if not (edt_PesqNomeDistribuidor.Text = EmptyStr) then
-         lFiltro := AddFiltro_Aux(lFiltro, ' NOME_DISTRIBUIDOR LIKE ' + QuotedStr(Trim('%' + edt_PesqNomeDistribuidor.Text + '%' )));
+         lFiltro := AddFiltro_Aux(lFiltro, ' DIST.NOME LIKE ' + QuotedStr(Trim('%' + edt_PesqNomeDistribuidor.Text + '%' )));
 
       QryPrincipal.SQL.Clear;
       QryPrincipal.SQL.Add( lFiltro + OrderBy );
@@ -157,8 +178,8 @@ begin
   cdsPrincipalNEGOCIACAO_ID.Value := 9999;
   cdsPrincipalCODIGO.Value        := 9999;
   cdsPrincipalDATA_CADASTRO.Value := dmPrincipal.DataAtual;
-  cdsPrincipalVLR_TOTAL.Value     := 0;
-  cdsPrincipalSTATUS.Value        := 0;
+  cdsPrincipalVLR_TOTAL.Value     := 0.00;
+  cdsPrincipalSTATUS.Value        := 'Pendente';
 
 end;
 
@@ -232,6 +253,12 @@ begin
     edt_DescProdutor.Clear;
     edt_IdProdutor.Clear;
     sCod_Produtor := EmptyStr;
+
+    edt_CodDistribuidor.Clear;
+    edt_DescDistribuidor.Clear;
+    edt_IdDistribuidor.Clear;
+    sCod_Distribuidor := EmptyStr;
+
   end
   else
   if (Trim( edt_CodProdutor.Text ) <> sCod_Produtor) then
@@ -273,9 +300,6 @@ begin
   cdsPrincipalDATA_CADASTRO.Required    := true;
   lbl_DataCadastro.Caption              := lbl_DataCadastro.Caption + '*';
 
-  cdsPrincipalDATA_CONCLUSAO.Required   := true;
-  lbl_DataConclusao.Caption             := lbl_DataConclusao.Caption + '*';
-
   cdsPrincipalVLR_TOTAL.Required        := true;
   lbl_VlrTotal.Caption                  := lbl_VlrTotal.Caption + '*';
 
@@ -313,24 +337,25 @@ begin
 
     if (pPesquisa = pProdutor) then
     begin
-      sSQL := 'SELECT empr.emcodg_empresa id, empr.emcodg_empresa "Código", empr.emnome_razao "Desc. Empresa" ' +
-              'FROM empresa empr ';
+      sSQL := 'SELECT prod.produtor_id id, prod.cpf_cnpj "CPF / CNPJ", prod.nome "Nome Produtor" ' +
+              'FROM produtor prod ';
 
-      sOrderBy := 'ORDER BY empr.emcodg_empresa';
+      sOrderBy := 'ORDER BY prod.nome';
 
-      frmPesquisa := TfrmPesqGeral.Create( Self, 'EMPRESA', 'empr.emcodg_empresa', 'Pesquisando empresa', ['empr.emcodg_empresa', 'empr.emcodg_empresa', 'empr.emnome_razao'],
+      frmPesquisa := TfrmPesqGeral.Create( Self, 'EMPRESA', 'prod.cpf_cnpj', 'Pesquisando produtor', ['prod.cpf_cnpj', 'prod.nome'],
                      edt_CodProdutor, edt_DescProdutor, edt_IdProdutor, sSQL, SOrderBy, sOpcaoJoin, pSair);
     end else
 
     if (pPesquisa = pDistribuidor) then
     begin
-      sSQL := 'SELECT unid.uncodg_unidade id, unid.uncodg_unidade "Código", unid.unnome_unidade "Desc. Unidade", UNPATH_CERT_DIGITAL, UNSENHA_CERT_DIGITAL ' +
-              'FROM unidade unid ';
-//              'WHERE unid.uncodg_empresa = ' + IfThen(not(edt_IdEmpresa.Text = EmptyStr), edt_IdEmpresa.Text, '0');
+      sSQL := 'SELECT dist.distribuidor_id id, dist.cnpj "Código", dist.nome "Nome", proc.vlr_credito "Vlr. Crédito" ' +
+              'FROM produtor_credito proc ' +
+              'INNER JOIN distribuidor dist ON (dist.distribuidor_id = proc.distribuidor_id)' +
+              'WHERE proc.produtor_id = ' + edt_IdProdutor.Text;
 
-      sOrderBy := 'ORDER BY unid.uncodg_unidade';
+      sOrderBy := 'ORDER BY dist.nome';
 
-      frmPesquisa := TfrmPesqGeral.Create( Self, 'UNIDADE', 'unid.uncodg_unidade', 'Pesquisando unidade', ['unid.uncodg_unidade', 'unid.uncodg_unidade', 'unid.unnome_unidade'],
+      frmPesquisa := TfrmPesqGeral.Create( Self, 'PRODUTOR_CREDITO', 'dist.cnpj', 'Pesquisando Distribuidor', ['dist.cnpj', 'dist.cnpj', 'dist.nome'],
                      edt_CodDistribuidor, edt_DescDistribuidor, edt_IdDistribuidor, sSQL, SOrderBy, sOpcaoJoin, pSair);
     end else
 
@@ -355,18 +380,22 @@ begin
       begin
         if (pPesquisa = pProdutor) then
         begin
-//          edt_IdEmpresa.Text := frmPesquisa.cdsPesquisa.FieldByName('id').AsString;
-//          edt_CodEmpresa.Text := frmPesquisa.cdsPesquisa.FieldByName('Código').AsString;
-//          edt_DescEmpresa.Text := frmPesquisa.cdsPesquisa.FieldByName('Desc. Empresa').AsString;
+          cdsPrincipalPRODUTOR_ID.Text := frmPesquisa.cdsPesquisa.FieldByName('id').AsString;
+          cdsPrincipalcod_produtor.Text := frmPesquisa.cdsPesquisa.FieldByName('CPF / CNPJ').AsString;
+          cdsPrincipalnome_produtor.Text := frmPesquisa.cdsPesquisa.FieldByName('Nome Produtor').AsString;
+
+          sCod_Produtor := frmPesquisa.cdsPesquisa.FieldByName('CPF / CNPJ').AsString;
         end else
         if (pPesquisa = pDistribuidor) then
         begin
-//          edt_IdUnidade.Text := frmPesquisa.cdsPesquisa.FieldByName('id').AsString;
-//          edt_CodUnidade.Text := frmPesquisa.cdsPesquisa.FieldByName('Código').AsString;
-//          edt_DescUnidade.Text := frmPesquisa.cdsPesquisa.FieldByName('Desc. Unidade').AsString;
-//
-//          VarDirCertificado := frmPesquisa.cdsPesquisa.FieldByName('UNPATH_CERT_DIGITAL').AsString;
-//          VarSenhaCertificado := frmPesquisa.cdsPesquisa.FieldByName('UNSENHA_CERT_DIGITAL').AsString;
+          cdsPrincipalDISTRIBUIDOR_ID.AsInteger  := frmPesquisa.cdsPesquisa.FieldByName('id').AsInteger;
+          cdsPrincipalcod_distribuidor.AsString  := frmPesquisa.cdsPesquisa.FieldByName('Código').AsString;
+          cdsPrincipalnome_distribuidor.AsString := frmPesquisa.cdsPesquisa.FieldByName('Nome').AsString;
+
+          cdsPrincipalvlr_credito_distribuidor.Value := frmPesquisa.cdsPesquisa.FieldByName('Vlr. Crédito').Value;
+          cdsPrincipalvlr_total_negociado.Value      := frmPesquisa.cdsPesquisa.FieldByName('Vlr. Crédito').Value;
+
+          sCod_Distribuidor := frmPesquisa.cdsPesquisa.FieldByName('Código').AsString;
         end else
         if (pPesquisa = pProduto) then
         begin
@@ -414,6 +443,11 @@ begin
     edt_IdProdutor.Clear;
     sCod_Produtor := EmptyStr;
 
+    edt_CodDistribuidor.Clear;
+    edt_DescDistribuidor.Clear;
+    edt_IdDistribuidor.Clear;
+    sCod_Distribuidor := EmptyStr;
+
   end;
 
   edt_CodProdutor.SetFocus;
@@ -441,18 +475,9 @@ begin
 
     bAchou := False;
     edt_CodDistribuidor.SetFocus;
-  end else
-  if ((iIndice = 3) or (iIndice = 999)) and (edt_DataConclusao.Text = EmptyStr) then
-  begin
-    SysMensagem('Campo Data Conclusão é obrigatório!', dsAviso);
-
-    bAchou := False;
-    edt_DataConclusao.SetFocus;
   end;
 
-
   Result := bAchou;
-
 
 end;
 
