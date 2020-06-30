@@ -41,7 +41,7 @@ begin
     Application.Title := SysVarNome_Sistema;
     FrmSplash.show;
     FrmSplash.update;
-    //Sleep(4000);
+    Sleep(4000);
     FrmSplash.hide;
     FrmSplash.free;
     Application.CreateForm(TfrmPrincipal, frmPrincipal);

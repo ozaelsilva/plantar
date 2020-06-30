@@ -52,7 +52,6 @@ var
     SysVarDta_Atual: TDateTime;
     SysVarForm_Atual : String;
     SysVarUsuarios_Longados : integer;
-    SysDirBoleto : String;
   end;
 
 implementation

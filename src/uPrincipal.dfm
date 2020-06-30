@@ -18,6 +18,7 @@ object frmPrincipal: TfrmPrincipal
   Position = poDesktopCenter
   WindowState = wsMaximized
   OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage

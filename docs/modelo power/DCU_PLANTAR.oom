@@ -2651,12 +2651,12 @@ LABL 0 Arial,8,N</a:FontList>
 <a:Code>Cadastrar_Distribuidor</a:Code>
 <a:CreationDate>1592957100</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593025797</a:ModificationDate>
+<a:ModificationDate>1593533261</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs20 T\&#39;edtulo do Documento: Cadastrar Distribuidor\par
-Autores: Ozael da Silva Melo\par
+Autor: Ozael da Silva Melo\par
 Coment\&#39;e1rios: \par
 \cf0\b0\f1\fs18\par
 \cf1\fs20\par
@@ -2711,12 +2711,12 @@ Coment\&#39;e1rios: \par
 <a:Code>Cadastrar_negociacao</a:Code>
 <a:CreationDate>1592957101</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593373989</a:ModificationDate>
+<a:ModificationDate>1593533407</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fcharset0 Calibri;}{\f3\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f4\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs20 T\&#39;edtulo do Documento: Cadastrar Negocia\&#39;e7\&#39;e3o\par
-Autores: Ozael da Silva Melo\par
+Autor: Ozael da Silva Melo\par
 Coment\&#39;e1rios: \par
 \cf0\b0\f1\fs18\par
 \cf1\fs20\par
@@ -2793,12 +2793,12 @@ Coment\&#39;e1rios: \par
 <a:Code>Cadastrar_produto</a:Code>
 <a:CreationDate>1592957103</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593025951</a:ModificationDate>
+<a:ModificationDate>1593533329</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs20 T\&#39;edtulo do Documento: Cadastrar Produto\par
-Autores: Ozael da Silva Melo\par
+Autor: Ozael da Silva Melo\par
 Coment\&#39;e1rios: \par
 \cf0\b0\f1\fs18\par
 \cf1\fs20\par
@@ -2856,12 +2856,12 @@ Coment\&#39;e1rios: \par
 <a:Code>Cadastrar_Produtor</a:Code>
 <a:CreationDate>1592957103</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593372129</a:ModificationDate>
+<a:ModificationDate>1593532973</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs20 T\&#39;edtulo do Documento: Cadastrar Produtor\par
-Autores: Ozael da Silva Melo\par
+Autor: Ozael da Silva Melo\par
 Coment\&#39;e1rios: \par
 \cf0\b0\f1\fs18\par
 \cf1\fs20\par
@@ -2918,12 +2918,12 @@ Coment\&#39;e1rios: \par
 <a:Code>Verificar_Credito</a:Code>
 <a:CreationDate>1592957104</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593031518</a:ModificationDate>
+<a:ModificationDate>1593533344</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs20 T\&#39;edtulo do Documento: Verificar Credito\par
-Autores: Ozael da Silva Melo\par
+Autor: Ozael da Silva Melo\par
 Coment\&#39;e1rios: \par
 \cf0\b0\f1\fs18\par
 \cf1\fs20\par
@@ -2972,12 +2972,12 @@ Coment\&#39;e1rios: \par
 <a:Code>Cadastrar_limite_de_credito</a:Code>
 <a:CreationDate>1593024688</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593026011</a:ModificationDate>
+<a:ModificationDate>1593533178</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs20 T\&#39;edtulo do Documento: Cadastrar limite de credito\par
-Autores: Ozael da Silva Melo\par
+Autor: Ozael da Silva Melo\par
 Coment\&#39;e1rios: \par
 \cf0\b0\f1\fs18\par
 \cf1\fs20\par
@@ -3031,12 +3031,12 @@ Coment\&#39;e1rios: \par
 <a:Code>Emitir_relatorio_de_Negociacao</a:Code>
 <a:CreationDate>1593026767</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593211674</a:ModificationDate>
+<a:ModificationDate>1593533483</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fcharset0 Calibri;}{\f3\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f4\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs20 T\&#39;edtulo do Documento: Emitir relat\&#39;f3rio de negocia\&#39;e7\&#39;e3o\par
-Autores: Ozael da Silva Melo\par
+Autor: Ozael da Silva Melo\par
 Coment\&#39;e1rios: \par
 \cf0\b0\f1\fs18\par
 \cf1\fs20\par

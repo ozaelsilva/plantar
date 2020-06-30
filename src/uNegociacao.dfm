@@ -2,7 +2,6 @@ inherited frmNegociacao: TfrmNegociacao
   Caption = 'frmNegociacao'
   ClientHeight = 484
   ClientWidth = 814
-  ExplicitTop = -25
   ExplicitWidth = 820
   ExplicitHeight = 513
   PixelsPerInch = 96
@@ -10,17 +9,19 @@ inherited frmNegociacao: TfrmNegociacao
   inherited stb_Principal: TStatusBar
     Top = 465
     Width = 814
-    ExplicitTop = 421
-    ExplicitWidth = 706
+    ExplicitTop = 465
+    ExplicitWidth = 814
   end
   inherited pgPrincipal: TPageControl
     Width = 814
     Height = 415
-    ExplicitWidth = 706
-    ExplicitHeight = 371
+    ExplicitWidth = 814
+    ExplicitHeight = 415
     inherited tbBrowser: TTabSheet
-      ExplicitWidth = 698
-      ExplicitHeight = 343
+      ExplicitLeft = 4
+      ExplicitTop = 24
+      ExplicitWidth = 806
+      ExplicitHeight = 387
       inherited DBGrid1: TDBGrid
         Top = 129
         Width = 806
@@ -64,7 +65,7 @@ inherited frmNegociacao: TfrmNegociacao
       inherited gBox_Pesquisa: TGroupBox
         Width = 806
         Height = 129
-        ExplicitWidth = 698
+        ExplicitWidth = 806
         ExplicitHeight = 129
         inherited lbl_PesqCodigo: TLabel
           Left = 57
@@ -106,8 +107,8 @@ inherited frmNegociacao: TfrmNegociacao
     inherited tbCadastro: TTabSheet
       ExplicitLeft = 4
       ExplicitTop = 24
-      ExplicitWidth = 698
-      ExplicitHeight = 343
+      ExplicitWidth = 806
+      ExplicitHeight = 387
       object lbl_codigo: TLabel
         Left = 9
         Top = 10
@@ -309,6 +310,7 @@ inherited frmNegociacao: TfrmNegociacao
         DataField = 'DATA_CONCLUSAO'
         DataSource = dsPrincipal
         Enabled = False
+        ReadOnly = True
         TabOrder = 8
       end
       object cbox_Status: TDBComboBox
@@ -401,10 +403,8 @@ inherited frmNegociacao: TfrmNegociacao
           ActivePage = tbBrowserItens
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 616
           object tbBrowserItens: TTabSheet
             Caption = 'Browser'
-            ExplicitWidth = 608
             object DBGrid2: TDBGrid
               Left = 0
               Top = 0
@@ -431,13 +431,26 @@ inherited frmNegociacao: TfrmNegociacao
                   Expanded = False
                   FieldName = 'nome_produto'
                   Title.Caption = 'Nome Produto'
-                  Width = 495
+                  Width = 325
                   Visible = True
                 end
                 item
                   Expanded = False
-                  FieldName = 'VLR_PRECO_VENDA'
-                  Title.Caption = 'Vlr. Pre'#231'o Venda'
+                  FieldName = 'QUANTIDADE'
+                  Title.Caption = 'Quantidade'
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'VLR_UNITARIO'
+                  Title.Caption = 'Vlr. Pre'#231'o Unit'#225'rio R$. '
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'calcVlrTotalItem'
+                  Title.Caption = 'Vlr. Total R$.'
+                  Width = 93
                   Visible = True
                 end>
             end
@@ -445,7 +458,6 @@ inherited frmNegociacao: TfrmNegociacao
           object tbCadastroItens: TTabSheet
             Caption = 'Cadastro'
             ImageIndex = 1
-            ExplicitWidth = 608
             object lbl_DescProduto: TLabel
               Left = 169
               Top = 9
@@ -495,11 +507,25 @@ inherited frmNegociacao: TfrmNegociacao
               OnClick = spb_ProdutoClick
             end
             object lbl_VlrPrecoVenda: TLabel
-              Left = 10
+              Left = 169
               Top = 58
               Width = 79
               Height = 13
               Caption = 'Vlr. Pre'#231'o Venda'
+            end
+            object lbl_Quantidade: TLabel
+              Left = 10
+              Top = 58
+              Width = 56
+              Height = 13
+              Caption = 'Quantidade'
+            end
+            object lbl_VlrTotalItem: TLabel
+              Left = 318
+              Top = 58
+              Width = 43
+              Height = 13
+              Caption = 'Vlr. Total'
             end
             object edt_DescProduto: TDBEdit
               Left = 169
@@ -537,15 +563,34 @@ inherited frmNegociacao: TfrmNegociacao
               Visible = False
             end
             object edt_VlrPrecoVenda: TDBEdit
-              Left = 10
+              Left = 169
               Top = 77
               Width = 126
               Height = 21
               CharCase = ecUpperCase
-              DataField = 'VLR_PRECO_VENDA'
+              DataField = 'VLR_UNITARIO'
               DataSource = dsNegociacao_Itens
               Enabled = False
+              TabOrder = 4
+            end
+            object edt_Quantidade: TDBEdit
+              Left = 10
+              Top = 77
+              Width = 126
+              Height = 21
+              DataField = 'QUANTIDADE'
+              DataSource = dsNegociacao_Itens
               TabOrder = 3
+            end
+            object edt_VlrTotalItem: TDBEdit
+              Left = 318
+              Top = 77
+              Width = 121
+              Height = 21
+              DataField = 'calcVlrTotalItem'
+              DataSource = dsNegociacao_Itens
+              Enabled = False
+              TabOrder = 5
             end
           end
         end
@@ -557,7 +602,6 @@ inherited frmNegociacao: TfrmNegociacao
           Align = alRight
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitLeft = 618
           object btnIIncluir: TSpeedButton
             Left = 9
             Top = 20
@@ -900,8 +944,8 @@ inherited frmNegociacao: TfrmNegociacao
   inherited Panel1: TPanel
     Top = 415
     Width = 814
-    ExplicitTop = 371
-    ExplicitWidth = 706
+    ExplicitTop = 415
+    ExplicitWidth = 814
     inherited btn_Imprimir: TBitBtn
       Left = 448
       ExplicitLeft = 448
@@ -2028,6 +2072,16 @@ inherited frmNegociacao: TfrmNegociacao
       FieldName = 'PRODUTO_ID'
       ProviderFlags = [pfInUpdate]
     end
+    object QryNegociacao_ItensQUANTIDADE: TSingleField
+      FieldName = 'QUANTIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object QryNegociacao_ItensVLR_UNITARIO: TFMTBCDField
+      FieldName = 'VLR_UNITARIO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
     object QryNegociacao_Itenscod_produto: TIntegerField
       FieldName = 'cod_produto'
       ProviderFlags = []
@@ -2050,6 +2104,7 @@ inherited frmNegociacao: TfrmNegociacao
     DataSetField = cdsPrincipalQryNegociacao_Itens
     Params = <>
     AfterInsert = cdsNegociacao_ItensAfterInsert
+    OnCalcFields = cdsNegociacao_ItensCalcFields
     Left = 700
     Top = 117
     object cdsNegociacao_ItensNEGOCIACAO_ITEM_ID: TIntegerField
@@ -2063,6 +2118,20 @@ inherited frmNegociacao: TfrmNegociacao
     object cdsNegociacao_ItensPRODUTO_ID: TIntegerField
       FieldName = 'PRODUTO_ID'
       ProviderFlags = [pfInUpdate]
+      DisplayFormat = '###,##0.00'
+    end
+    object cdsNegociacao_ItensQUANTIDADE: TSingleField
+      FieldName = 'QUANTIDADE'
+      ProviderFlags = [pfInUpdate]
+      Visible = False
+    end
+    object cdsNegociacao_ItensVLR_UNITARIO: TFMTBCDField
+      FieldName = 'VLR_UNITARIO'
+      ProviderFlags = [pfInUpdate]
+      Visible = False
+      DisplayFormat = '###,##0.00'
+      Precision = 18
+      Size = 2
     end
     object cdsNegociacao_Itenscod_produto: TIntegerField
       FieldName = 'cod_produto'
@@ -2080,13 +2149,18 @@ inherited frmNegociacao: TfrmNegociacao
       Precision = 18
       Size = 2
     end
+    object cdsNegociacao_ItenscalcVlrTotalItem: TCurrencyField
+      FieldKind = fkInternalCalc
+      FieldName = 'calcVlrTotalItem'
+      DisplayFormat = '###,##0.00'
+    end
     object cdsNegociacao_ItenssumVlrPrecoVenda: TAggregateField
       FieldName = 'sumVlrPrecoVenda'
       ProviderFlags = []
       Active = True
       DisplayName = ''
       DisplayFormat = '###,##0.00'
-      Expression = 'sum(VLR_PRECO_VENDA)'
+      Expression = 'sum(calcVlrTotalItem)'
     end
   end
   object ImageList1: TImageList

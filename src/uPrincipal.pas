@@ -40,15 +40,13 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure ToolButton6Click(Sender: TObject);
     procedure act_SairExecute(Sender: TObject);
-    procedure act_GerarBoletosExecute(Sender: TObject);
-    procedure act_ConfiguracoesExecute(Sender: TObject);
-    procedure act_IntegrarBancoExecute(Sender: TObject);
     procedure act_SobreExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure act_ProdutoExecute(Sender: TObject);
     procedure act_ProdutorExecute(Sender: TObject);
     procedure aco_distribuidorExecute(Sender: TObject);
     procedure act_negociacaoExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -93,126 +91,9 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.act_ConfiguracoesExecute(Sender: TObject);
-//var
-//  frmOpcoes: TfrmOpcoes;
-begin
-
-//  frmOpcoes := TfrmOpcoes.Create( Self );
-//  try
-//    frmOpcoes.ShowModal;
-//
-//  finally
-//    frmOpcoes.Free;
-//  end;
-end;
-
 procedure TfrmPrincipal.act_SairExecute(Sender: TObject);
 begin
   Close;
-end;
-
-procedure TfrmPrincipal.act_GerarBoletosExecute(Sender: TObject);
-//var
-//  frmGerarBoleto: TfrmGerarBoleto;
-//  vStateBooMark:TBookmark;
-begin
-
-//  try
-//    vStateBooMark := dsCobranca.DataSet.GetBookmark;
-//
-//    Screen.Cursor := crHourGlass;
-//    dsCobranca.DataSet.DisableControls;
-//
-//    if not(SysContarSelecionados( dmPrincipal.CdsCobranca ) = 0) then
-//    begin
-//
-//    { Gerar boletos no diretório parametrizado }
-//    frmGerarBoleto := TfrmGerarBoleto.Create( Self, dmPrincipal.CdsCobranca );
-//    try
-//      frmGerarBoleto.ShowModal;
-//
-//    finally
-//      frmGerarBoleto.Free;
-//    end;
-//
-//    end else
-//      SysMensagem('Não existem parcelas selecionadas para gerar os boletos!', dsAviso);
-//
-//    dsCobranca.DataSet.GotoBookmark(vStateBooMark);
-//
-//  finally
-//    dsCobranca.DataSet.EnableControls;
-//    Screen.Cursor := crDefault;
-//  end;
-
-end;
-
-procedure TfrmPrincipal.act_IntegrarBancoExecute(Sender: TObject);
-//var
-//  frmIntegrarBanco: TFrmIntegrarBanco;
-//  vStateBooMark:TBookmark;
-//
-//  Estado : Dword;
-begin
-
-//  try
-//    vStateBooMark := dsCobranca.DataSet.GetBookmark;
-//
-//    Screen.Cursor := crHourGlass;
-//    dsCobranca.DataSet.DisableControls;
-//
-//    { Verificar se parcela foi selecionada }
-//    if (SysContarSelecionados( dmPrincipal.CdsCobranca ) = 0) then
-//    begin
-//      SysMensagem('Não existem parcelas selecionadas para integração!', dsAviso);
-//      exit;
-//    end;
-//
-//    { Verificar conexão com a internet }
-//    if not( InternetGetConnectedState(@Estado, 0) ) then
-//    begin
-//      SysMensagem('Verifique sua conexão de internet!', dsErro);
-//      exit;
-//    end;
-//
-//    { Verificar se unidade informou os parametros de certificado }
-//    if ( VarDirCertificado = EmptyStr ) or ( VarSenhaCertificado = EmptyStr ) then
-//    begin
-//      SysMensagem('Verifique os parâmetros do certificado no cadastro da unidade!', dsErro);
-//      exit;
-//    end else
-//    begin
-//      if not(FileExists(VarDirCertificado)) then
-//      begin
-//        SysMensagem('Certificado não foi encontrado no caminho informado!', dsErro);
-//        exit;
-//      end;
-//    end;
-//
-//    { Integrar Parcelas com webservice do banco bradesco }
-//    frmIntegrarBanco := TFrmIntegrarBanco.Create( Self, dmPrincipal.CdsCobranca );
-//    try
-//      frmIntegrarBanco.ShowModal;
-//      dsCobranca.DataSet.GotoBookmark(vStateBooMark);
-//
-//      if frmIntegrarBanco.FIntegrado then
-//      begin
-//        if dmPrincipal.CdsCobranca.State in [dsEdit] then
-//          dmPrincipal.CdsCobranca.Post;
-//
-//        dsCobranca.DataSet.Refresh;
-//      end;
-//
-//    finally
-//      frmIntegrarBanco.Free;
-//    end;
-//
-//  finally
-//    dsCobranca.DataSet.EnableControls;
-//    Screen.Cursor := crDefault;
-//  end;
-
 end;
 
 procedure TfrmPrincipal.act_negociacaoExecute(Sender: TObject);
@@ -266,6 +147,11 @@ begin
   if not(SysMensagem('Você tem certeza de que quer sair?', dsConfirmacao)) then
     Canclose := False;
 
+end;
+
+procedure TfrmPrincipal.FormCreate(Sender: TObject);
+begin
+  Caption := SysVarNome_SistemaDetalhado;
 end;
 
 procedure TfrmPrincipal.Timer1Timer(Sender: TObject);

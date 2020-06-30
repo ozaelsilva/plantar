@@ -114,6 +114,15 @@ type
     ImageList1: TImageList;
     btn_Concluir: TBitBtn;
     cdsNegociacao_ItenssumVlrPrecoVenda: TAggregateField;
+    QryNegociacao_ItensQUANTIDADE: TSingleField;
+    QryNegociacao_ItensVLR_UNITARIO: TFMTBCDField;
+    cdsNegociacao_ItensQUANTIDADE: TSingleField;
+    cdsNegociacao_ItensVLR_UNITARIO: TFMTBCDField;
+    edt_Quantidade: TDBEdit;
+    edt_VlrTotalItem: TDBEdit;
+    lbl_Quantidade: TLabel;
+    lbl_VlrTotalItem: TLabel;
+    cdsNegociacao_ItenscalcVlrTotalItem: TCurrencyField;
     procedure FormCreate(Sender: TObject);
     procedure act_pesquisarExecute(Sender: TObject);
     procedure cdsPrincipalAfterInsert(DataSet: TDataSet);
@@ -154,6 +163,7 @@ type
     procedure spb_ProdutoClick(Sender: TObject);
     procedure cdsNegociacao_ItensAfterInsert(DataSet: TDataSet);
     procedure cdsPrincipalBeforeDelete(DataSet: TDataSet);
+    procedure cdsNegociacao_ItensCalcFields(DataSet: TDataSet);
   private
     { Private declarations }
     ID_Mestre : integer;
@@ -269,7 +279,7 @@ begin
 
   end;
 
-  result := bCreditoDisponivel;
+  Result := bCreditoDisponivel;
 end;
 function TfrmNegociacao.VerificarCreditoUtilizado(iprodutor_id, idistribuidor_id : integer ) : Double;
 begin
@@ -676,6 +686,12 @@ begin
 
 end;
 
+procedure TfrmNegociacao.cdsNegociacao_ItensCalcFields(DataSet: TDataSet);
+begin
+  inherited;
+  cdsNegociacao_ItenscalcVlrTotalItem.AsFloat := ( cdsNegociacao_ItensQUANTIDADE.AsFloat * cdsNegociacao_ItensVLR_UNITARIO.AsFloat);
+end;
+
 procedure TfrmNegociacao.cdsPrincipalAfterInsert(DataSet: TDataSet);
 begin
   inherited;
@@ -749,6 +765,7 @@ begin
   edt_CodProduto.Hint       := 'Código Produto';
   edt_DescProduto.Hint      := 'Nome Produto';
   edt_VlrPrecoVenda.Hint    := 'Vlr. Preço Venda';
+  edt_Quantidade.Hint       := 'Quantidade';
 
 end;
 
@@ -944,6 +961,9 @@ begin
   cdsNegociacao_Itenscod_produto.Required := true;
   lbl_CodProduto.Caption                  := lbl_CodProduto.Caption + '*';
 
+  cdsNegociacao_ItensQUANTIDADE.Required  := true;
+  lbl_Quantidade.Caption                  := lbl_Quantidade.Caption + '*';
+
 end;
 
 procedure TfrmNegociacao.setTituloCampos;
@@ -965,6 +985,7 @@ begin
   cdsNegociacao_Itenscod_produto.DisplayLabel     := 'Código Produto';
   cdsNegociacao_Itensnome_produto.DisplayLabel    := 'Nome Produto';
   cdsNegociacao_ItensVLR_PRECO_VENDA.DisplayLabel := 'Vlr. Preço Venda';
+  cdsNegociacao_ItensQUANTIDADE.DisplayLabel      := 'Quantidade';
 
 end;
 
@@ -1044,7 +1065,8 @@ begin
           cdsNegociacao_Itenscod_produto.Value     := frmPesquisa.cdsPesquisa.FieldByName('Código').Value;
           cdsNegociacao_Itensnome_produto.Value    := frmPesquisa.cdsPesquisa.FieldByName('Nome Produto').Value;
 
-          cdsNegociacao_ItensVLR_PRECO_VENDA.AsFloat := frmPesquisa.cdsPesquisa.FieldByName('Vlr. Preço Venda').Value;
+          cdsNegociacao_ItensVLR_UNITARIO.AsFloat  := frmPesquisa.cdsPesquisa.FieldByName('Vlr. Preço Venda').Value;
+
 
           sCod_Produto := frmPesquisa.cdsPesquisa.FieldByName('Código').Value;
         end;
@@ -1157,7 +1179,15 @@ begin
 
     bAchou := False;
     edt_CodProduto.SetFocus;
+  end else
+  if ((iIndice = 2) or (iIndice = 999)) and (edt_Quantidade.Text = EmptyStr) then
+  begin
+    SysMensagem('Campo Quantidade Produto é obrigatório!', dsAviso);
+
+    bAchou := False;
+    edt_Quantidade.SetFocus;
   end;
+
 
   Result := bAchou;
 

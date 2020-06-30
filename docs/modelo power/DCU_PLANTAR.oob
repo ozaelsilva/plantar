@@ -2711,7 +2711,7 @@ Coment\&#39;e1rios: \par
 <a:Code>Cadastrar_negociacao</a:Code>
 <a:CreationDate>1592957101</a:CreationDate>
 <a:Creator>Ozael</a:Creator>
-<a:ModificationDate>1593372294</a:ModificationDate>
+<a:ModificationDate>1593373989</a:ModificationDate>
 <a:Modifier>Ozael</a:Modifier>
 <a:Step>{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fswiss\fcharset0 Calibri,Bold;}{\f1\fswiss\fprq2\fcharset0 Calibri;}{\f2\fswiss\fcharset0 Calibri;}{\f3\fswiss\fprq1\fcharset0 Calibri,Italic;}{\f4\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue0;}
@@ -2768,7 +2768,7 @@ Coment\&#39;e1rios: \par
 \pard\qj      Data de cancelamento da negocia\&#39;e7\&#39;e3o caso seja cancelada\par
 \pard\par
   - data_conclusao\par
-\pard\qj      Data de conclus\&#39;e3o da negocia\&#39;e7\&#39;e3o\par
+\pard\qj      Data de conclus\&#39;e3o da negocia\&#39;e7\&#39;e3o caso seja concluida\par
 \pard\par
   - * status\par
      Status da negocia\&#39;e7\&#39;e3o ( 1- \cf1\f2\fs18\ldblquote Pendente\rdblquote , 2 - \ldblquote Aprovada\rdblquote ,  3 - \ldblquote Concluir\rdblquote , 4- \ldblquote Cancelada\rdblquote ) \par

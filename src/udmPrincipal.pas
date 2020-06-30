@@ -13,7 +13,7 @@ type
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
-    sArquivoConexoes, sArquivoPreferencias, sUser_Name, sPassword, sHostName, sDatabase, sDirBoleto: string;
+    sArquivoConexoes, sArquivoPreferencias, sUser_Name, sPassword, sHostName, sDatabase : string;
     procedure LerParametros(Conexao: String);
 
     function LerUltimoAliasValido(Conexao, Dir: String): String;
@@ -288,8 +288,6 @@ begin
       Sistema.SysVarBanco_de_dados := p_xDatabase
     else
       Sistema.SysVarBanco_de_dados := sDatabase;
-
-    Sistema.SysDirBoleto := sDirBoleto;
 
     bDatabaseAtivo := bConectado;
     Result := bConectado;

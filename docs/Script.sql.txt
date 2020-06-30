@@ -133,8 +133,10 @@ END;
 /*NEGOCIACAO_ITENS*/
 create table NEGOCIACAO_ITENS (
 NEGOCIACAO_ITEM_ID   INTEGER                        not null,
-NEGOCIACAO_ID        INTEGER,
-PRODUTO_ID           INTEGER,
+NEGOCIACAO_ID        INTEGER                        not null,
+PRODUTO_ID           INTEGER                        not null,
+QUANTIDADE           FLOAT                          not null,
+VLR_UNITARIO         NUMERIC(10,2)                  not null,
 constraint PK_NEGOCIACAO_ITENS primary key (NEGOCIACAO_ITEM_ID)
 );
 
@@ -151,9 +153,9 @@ CREATE TRIGGER TG_NEGOCIACAO_ITENS for NEGOCIACAO_ITENS
 BEFORE INSERT position 0
 AS
 BEGIN
-	new.NEGOCIACAO_ITEM_ID = gen_id("GEN_NEGOCIACAO_ITEM_ID", 1);
+new.NEGOCIACAO_ITEM_ID = gen_id("GEN_NEGOCIACAO_ITEM_ID", 1);
 END;
-	  
+  
 	  
 	  
 	  
