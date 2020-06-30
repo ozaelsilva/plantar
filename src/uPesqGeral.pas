@@ -14,6 +14,8 @@ type
     { Private declarations }
   public
     { Public declarations }
+    procedure setTamanhoColunas_Grid; override;
+    procedure setFormataColunas_Grid; override;
   end;
 
 var
@@ -24,5 +26,36 @@ implementation
 {$R *.dfm}
 
 uses udmPrincipal;
+
+{ TfrmPesqGeral }
+
+procedure TfrmPesqGeral.setFormataColunas_Grid;
+begin
+
+  if FTabela = 'PRODUTOR_CREDITO' then
+    TNumericField(cdsPesquisa.Fields[3]).DisplayFormat := '###,##0.00'
+  else
+  if FTabela = 'PRODUTO' then
+    TNumericField(cdsPesquisa.Fields[3]).DisplayFormat := '###,##0.00';
+
+end;
+
+procedure TfrmPesqGeral.setTamanhoColunas_Grid;
+begin
+
+  if FTabela = 'PRODUTOR_CREDITO' then
+  begin
+    DBGrid2.Columns[0].Width := 90;
+    DBGrid2.Columns[1].Width := 230;
+    DBGrid2.Columns[2].Width := 120;
+  end else
+  if FTabela = 'PRODUTO' then
+  begin
+    DBGrid2.Columns[0].Width := 90;
+    DBGrid2.Columns[1].Width := 230;
+    DBGrid2.Columns[2].Width := 120;
+  end;
+
+end;
 
 end.

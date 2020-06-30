@@ -1,5 +1,6 @@
 inherited frmProduto: TfrmProduto
   Caption = 'frmProduto'
+  ExplicitTop = -24
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgPrincipal: TPageControl
@@ -577,7 +578,7 @@ inherited frmProduto: TfrmProduto
           Font.Style = [fsBold]
           Frame.Typ = []
           Memo.UTF8W = (
-            'Nome Produtor')
+            'Nome Produto')
           ParentFont = False
           VAlign = vaCenter
         end

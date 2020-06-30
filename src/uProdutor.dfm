@@ -2,6 +2,7 @@ inherited frmProdutor: TfrmProdutor
   Caption = 'frmProdutor'
   ClientHeight = 403
   ClientWidth = 693
+  ExplicitTop = -62
   ExplicitWidth = 699
   ExplicitHeight = 432
   PixelsPerInch = 96
@@ -9,15 +10,19 @@ inherited frmProdutor: TfrmProdutor
   inherited stb_Principal: TStatusBar
     Top = 384
     Width = 693
+    ExplicitTop = 384
+    ExplicitWidth = 693
   end
   inherited pgPrincipal: TPageControl
     Width = 693
     Height = 334
+    ExplicitWidth = 693
+    ExplicitHeight = 334
     inherited tbBrowser: TTabSheet
       ExplicitLeft = 4
       ExplicitTop = 24
-      ExplicitWidth = 686
-      ExplicitHeight = 291
+      ExplicitWidth = 685
+      ExplicitHeight = 306
       inherited DBGrid1: TDBGrid
         Width = 685
         Height = 207
@@ -46,13 +51,14 @@ inherited frmProdutor: TfrmProdutor
       end
       inherited gBox_Pesquisa: TGroupBox
         Width = 685
+        ExplicitWidth = 685
       end
     end
     inherited tbCadastro: TTabSheet
       ExplicitLeft = 4
       ExplicitTop = 24
-      ExplicitWidth = 686
-      ExplicitHeight = 291
+      ExplicitWidth = 685
+      ExplicitHeight = 306
       object lbl_cpfcnpj: TLabel
         Left = 144
         Top = 10
@@ -152,6 +158,10 @@ inherited frmProdutor: TfrmProdutor
           object tbCadastroItens: TTabSheet
             Caption = 'Cadastro'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_DescDistribuidor: TLabel
               Left = 169
               Top = 9
@@ -593,6 +603,8 @@ inherited frmProdutor: TfrmProdutor
   inherited Panel1: TPanel
     Top = 334
     Width = 693
+    ExplicitTop = 334
+    ExplicitWidth = 693
   end
   inherited ActionList1: TActionList
     inherited act_pesquisar: TAction

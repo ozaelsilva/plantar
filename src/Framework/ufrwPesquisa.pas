@@ -49,6 +49,8 @@ type
     destructor Destroy; override;
 
     procedure setCamposVisiveis_Grid; virtual;
+    procedure setTamanhoColunas_Grid; virtual;
+    procedure setFormataColunas_Grid; virtual;
   end;
 
 var
@@ -155,6 +157,8 @@ begin
   Executar_Pesquisa;
 
   setCamposVisiveis_Grid;
+  setTamanhoColunas_Grid;
+  setFormataColunas_Grid;
 
   StatusBar1.Panels[0].Text := 'Qtde. Registros: ' + IntToStr(cdsPesquisa.RecordCount);
   StatusBar1.Panels[1].Text := 'Clique 2 vezes no grid ou tecle <enter> para selecionar';
@@ -164,6 +168,16 @@ procedure TfrwPesquisa.setCamposVisiveis_Grid;
 begin
   if (cdsPesquisa.FieldCount > 0) then
     cdsPesquisa.Fields[0].Visible := False;
+
+end;
+
+procedure TfrwPesquisa.setFormataColunas_Grid;
+begin
+
+end;
+
+procedure TfrwPesquisa.setTamanhoColunas_Grid;
+begin
 
 end;
 

@@ -227,6 +227,7 @@ var
   sText : String;
 begin
 
+  { Cancelar Manutenção dos itens de produtor }
   if (cdsLimiteDistribuidor.State in [dsInsert, dsEdit]) then
   begin
     if cdsLimiteDistribuidor.State = dsEdit then
@@ -268,6 +269,7 @@ end;
 procedure TfrmProdutor.btnIGravarClick(Sender: TObject);
 begin
 
+  { Gravar Registro }
   if VerificarCamposItens(999) then
   begin
     if (SysMensagem('Deseja realmente salvar o registro?', dsConfirmacao)) then
@@ -355,6 +357,7 @@ begin
   edt_CpfCnpj.Hint     := 'CPF / CNPJ';
   edt_NOME.Hint        := 'Nome';
 
+  { Itens }
   edt_CodDistribuidor.Hint := 'Código Distribuidor';
   edt_VlrCredito.Hint      := 'Vlr. Crédito';
 end;
@@ -525,7 +528,7 @@ begin
   cdsPrincipalNOME.Required        := true;
   lbl_Nome.Caption                 := lbl_Nome.Caption + '*';
 
-
+  { Itens }
   cdsLimiteDistribuidorcod_distribuidor.Required := true;
   lbl_CodDistribuidor.Caption                    := lbl_CodDistribuidor.Caption + '*';
 
@@ -541,6 +544,7 @@ begin
   cdsPrincipalCPF_CNPJ.DisplayLabel                  := 'CPF / CNPJ';
   cdsPrincipalNOME.DisplayLabel                      := 'Nome';
 
+  { Itens }
   cdsLimiteDistribuidorcod_distribuidor.DisplayLabel := 'Código Distribuidor';
   cdsLimiteDistribuidorVLR_CREDITO.DisplayLabel      := 'Vlr. Crédito';
 

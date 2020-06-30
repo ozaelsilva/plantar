@@ -94,7 +94,7 @@ type
 
     function VerificarCampos(iIndice : Integer) : Boolean; virtual;
 
-    procedure Cfg_Button;
+    procedure Cfg_Button; virtual;
 
     property TituloFormulario : String read FTituloFormulario write SetTituloFormulario;
     property OrderBy : String read FOrderBy write SetOrderBy;
@@ -189,6 +189,7 @@ begin
 
       Cfg_Button;
 
+      cdsPrincipal.MergeChangeLog;
       cdsPrincipal.Refresh;
       cdsPrincipal.First;
     end;
@@ -246,14 +247,7 @@ end;
 procedure TfrwCadastro.act_FecharExecute(Sender: TObject);
 begin
   { Fechar Tela }
-  if CdsPrincipal.State in [dsInsert, dsEdit] then
-  begin
-    if (sysMensagem('Deseja cancelar a alteração?', dsConfirmacao)) then
-      Close;
-
-  end
-  else
-    Close;
+  Close;
 end;
 
 procedure TfrwCadastro.act_GravarExecute(Sender: TObject);
@@ -270,6 +264,7 @@ begin
         pgPrincipal.ActivePage := tbBrowser;
         Cfg_Button;
 
+        cdsPrincipal.MergeChangeLog;
         cdsPrincipal.Refresh;
         cdsPrincipal.First;
       end;

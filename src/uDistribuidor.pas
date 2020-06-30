@@ -145,7 +145,7 @@ begin
 
   bAchou := True;
 
-  if ((iIndice = 1) or (iIndice = 999)) and (edt_Cnpj.Text = EmptyStr) then
+  if ((iIndice = 1) or (iIndice = 999)) and (Trim(edt_Cnpj.Text) = EmptyStr) then
   begin
     SysMensagem('Campo CNPJ é obrigatório!', dsAviso);
 

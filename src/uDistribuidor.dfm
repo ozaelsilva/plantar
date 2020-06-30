@@ -1,14 +1,9 @@
 inherited frmDistribuidor: TfrmDistribuidor
   Caption = 'frmDistribuidor'
-  ExplicitTop = -68
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgPrincipal: TPageControl
     inherited tbBrowser: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
-      ExplicitWidth = 686
-      ExplicitHeight = 291
       inherited DBGrid1: TDBGrid
         Columns = <
           item
